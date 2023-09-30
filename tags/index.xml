@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on 研究研究</title>
+    <link>https://typeof.tech/tags/</link>
+    <description>Recent content in Tags on 研究研究</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>daymade</copyright>
+    <lastBuildDate>Sun, 02 Jul 2023 21:43:13 +0800</lastBuildDate><atom:link href="https://typeof.tech/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>code reabability</title>
+      <link>https://typeof.tech/tags/code-reabability/</link>
+      <pubDate>Sun, 02 Jul 2023 21:43:13 +0800</pubDate>
+      
+      <guid>https://typeof.tech/tags/code-reabability/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>java</title>
+      <link>https://typeof.tech/tags/java/</link>
+      <pubDate>Sun, 02 Jul 2023 21:43:13 +0800</pubDate>
+      
+      <guid>https://typeof.tech/tags/java/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>design</title>
+      <link>https://typeof.tech/tags/design/</link>
+      <pubDate>Sun, 02 Jul 2023 20:43:13 +0800</pubDate>
+      
+      <guid>https://typeof.tech/tags/design/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>debugging</title>
+      <link>https://typeof.tech/tags/debugging/</link>
+      <pubDate>Tue, 24 Apr 2018 19:45:42 +0800</pubDate>
+      
+      <guid>https://typeof.tech/tags/debugging/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>windbg</title>
+      <link>https://typeof.tech/tags/windbg/</link>
+      <pubDate>Tue, 24 Apr 2018 19:45:42 +0800</pubDate>
+      
+      <guid>https://typeof.tech/tags/windbg/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
