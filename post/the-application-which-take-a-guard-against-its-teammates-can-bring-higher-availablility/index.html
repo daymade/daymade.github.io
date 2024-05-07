@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>The Application Which Take a Guard Against Its Teammates Can Bring Higher Availablility - 研究研究</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="daymade" /><meta name="description" content="健壮的应用从防范队友做起" /><meta name="keywords" content="daymade" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.125.4 with theme even" />
+
+
+<link rel="canonical" href="https://typeof.tech/post/the-application-which-take-a-guard-against-its-teammates-can-bring-higher-availablility/" />
+  <link href="https://typeof.tech/post/the-application-which-take-a-guard-against-its-teammates-can-bring-higher-availablility/index.xml" rel="alternate" type="application/rss+xml" title="研究研究" />
+  <link href="https://typeof.tech/post/the-application-which-take-a-guard-against-its-teammates-can-bring-higher-availablility/index.xml" rel="feed" type="application/rss+xml" title="研究研究" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="https://typeof.tech/post/the-application-which-take-a-guard-against-its-teammates-can-bring-higher-availablility/">
+  <meta property="og:site_name" content="研究研究">
+  <meta property="og:title" content="The Application Which Take a Guard Against Its Teammates Can Bring Higher Availablility">
+  <meta property="og:description" content="健壮的应用从防范队友做起">
+  <meta property="og:locale" content="zh-cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-04-24T20:25:53+08:00">
+    <meta property="article:modified_time" content="2019-07-26T23:09:15+08:00">
+
+  <meta itemprop="name" content="The Application Which Take a Guard Against Its Teammates Can Bring Higher Availablility">
+  <meta itemprop="description" content="健壮的应用从防范队友做起">
+  <meta itemprop="datePublished" content="2018-04-24T20:25:53+08:00">
+  <meta itemprop="dateModified" content="2019-07-26T23:09:15+08:00">
+  <meta itemprop="wordCount" content="1218"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="The Application Which Take a Guard Against Its Teammates Can Bring Higher Availablility">
+<meta name="twitter:description" content="健壮的应用从防范队友做起">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">研究研究</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">研究研究</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">The Application Which Take a Guard Against Its Teammates Can Bring Higher Availablility</h1>
+      <h3 class="post-meta">健壮的应用从防范队友做起</h3>
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-24 </span>
+        <span class="more-meta"> daymade </span>
+        
+        
+          <span class="more-meta"> 约 1218 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      <h2 id="0x00-什么是高可用">0x00 什么是高可用</h2>
+<p>大家都知道, 在分布式系统中, 故障是不可避免的. 时序故障, 随机故障, 遗漏故障无时无刻不在发生.</p>
+<p>虽然故障不可避免, 但我们可以通过设计, 屏蔽, 降级, 补偿掉某些故障.</p>
+<p>迄今为止, DSF 生产环境基本没有出现过全面故障. 只发生过一次机房断电, 服务和服务之间网络不通导致的局部失败. 整个集群还是正常运行的.</p>
+<p>DSF 是怎么做到这一点的? 下面简单介绍几点设计理念.</p>
+<h4 id="sla">SLA</h4>
+<p>首先定义下可用性( <a href="https://en.wikipedia.org/wiki/Service-level_agreement">SLA</a> )是什么:</p>
+<blockquote>
+<p>A service-level agreement is an agreement between two or more parties, where one is the customer and the others are service providers.</p>
+</blockquote>
+<p>简单来讲, 可用性是一个承诺, 代表了你可以保证系统有多少时间是可以正常提供服务的.</p>
+<p>通常衡量可用性的单位是 <code>宕机时间</code> 和 <code>正常运行时间</code> 的百分比, 也就是大家常说的几个 9 的可用性.</p>
+<h3 id="怎么测量可用性">怎么测量可用性</h3>
+<p>The software industry generally measures availability by using two types of metrics (measurements):</p>
+<ul>
+<li>The mean time to recover</li>
+<li>The mean time between failures</li>
+</ul>
+<p>通过一系列的高可用设计手段, 可以提高可用性.</p>
+<p>高可用的目标:</p>
+<ul>
+<li>一个服务的依赖的失败, 不能影响到服务本身.</li>
+<li>当依赖失败时候, 服务应该能够自动采取正确的操作.</li>
+<li>服务应该能够显示现在的运行状态, 和历史的运行状态, 发生过什么事情.</li>
+</ul>
+<h2 id="0x01-高可用的常用手段">0x01 高可用的常用手段</h2>
+<h3 id="复制冗余">复制(冗余)</h3>
+<p>When failures occur, the <a href="https://docs.oracle.com/cd/A91202_01/901_doc/rac.901/a89867/glossary.htm#432337"><strong>failover</strong></a> process moves processing performed by the failed component to the backup component.</p>
+<p>The more transparent that failover is to users, the higher the availability of the system.</p>
+<p>案例:</p>
+<ul>
+<li>
+<p>DSF 控制中心有复制. 每个控制中心节点都是无状态的. 其中保存了一份 ZK 集群的完整副本.</p>
+<p>这个复制提供了控制中心在核心数据库 ZK 集群挂掉的情况下继续运行的能力.</p>
+</li>
+</ul>
+<h3 id="缓存">缓存</h3>
+<p>cache 和复制一脉相承, 是在 C 端实现的复制.</p>
+<p>案例:</p>
+<p>DSF 客户端缓存所有的寻址请求. 如果控制中心失败, 或者网络发生分区, 客户端拿不到最新的终结点信息, 但是会一直沿用之前成功的结果.</p>
+<p>这个复制提供了客户端在控制中心集群挂掉的情况下继续运行的能力.</p>
+<h3 id="限流">限流</h3>
+<p>如果对访问的次数不加控制，很可能会造成 API 被滥用，甚至被 <a href="https://en.wikipedia.org/wiki/Denial-of-service_attack">DDos 攻击</a>。根据使用者不同的身份对其进行限流，可以防止这些情况，减少服务器的压力。</p>
+<blockquote>
+<p>人啊, 认清你自己</p>
+<p>&ndash;尼采</p>
+</blockquote>
+<p>设计容量等于承诺. 有很多系统在提供给外部使用时, 并不知道自己能承受多大的访问量, 也就没有承诺.</p>
+<p>承诺带来了契约, 高于你对外公布的容量之外的请求都会被拒绝, 从而保护后端不被额外的压力冲垮.</p>
+<p>限流有一个额外的作用, 就是防范来自队友的不合理请求.</p>
+<p>你不能保证队友写的代码没有 BUG, 如果下游某个服务突然狂暴的将流量打到你这边, 你的服务应该能够自动合理的进行拒绝.</p>
+<p>案例:</p>
+<p>控制中心对所有服务容器( Kernel ) 的请求进行了限流. 每个 Kernel 单位时间能够发起的请求是有限的.</p>
+<p>这个设计曾经无数次成功防御了来自 Kernel 的额外流量.</p>
+<h3 id="柔性设计">柔性设计</h3>
+<h4 id="强一致性---最终一致性">强一致性 -&gt; 最终一致性</h4>
+<p>分布式系统中有 CAP 的限制, 三者只能取其二, 既然要提高可用性 A, 那么我们一般选择放弃 C. 保留 P</p>
+<p>DSF 控制中心是一个 AP 系统. 通过最终一致性的设计, 能够提供任一台节点挂掉. 不影响集群可用性的能力.</p>
+<h4 id="同步---异步">同步 -&gt; 异步</h4>
+<p>对 DB 的操作改为异步.</p>
+<p>案例:</p>
+<p>线下环境发生过一次数据库被误操作删除 (数据库: 怎么又是我) 的情况,</p>
+<p>这时 DSF 集群的服务完全不受影响. 只是后台无法查看运行状态数据了. 将整体失败降级为局部失败.</p>
+<h2 id="reference">Reference</h2>
+<ul>
+<li><a href="https://docs.oracle.com/cd/A91202_01/901_doc/rac.901/a89867/pshavdtl.htm#6062">High Availability Concepts and Best Practices</a></li>
+<li><a href="https://medium.com/netflix-techblog/making-the-netflix-api-more-resilient-a8ec62159c2d">Making the Netflix API More Resilient</a></li>
+<li><a href="http://coolshell.cn/articles/17459.html">关于高可用的系统</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">daymade</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-07-26
+        <a href="blog/commit/1c8b545689a257fb8564f74d42f56f72e94f74c7" title="init">(1c8b545)</a>
+    </span>
+  </p>
+  <p class="copyright-item">
+      <span class="item-title">原始文档</span>
+      <span class="item-content"><a class="link-to-markdown" href="/post/the-application-which-take-a-guard-against-its-teammates-can-bring-higher-availablility/index.md" target="_blank">查看本文 Markdown 版本 »</a></span>
+    </p>
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/i-insist-on-go-get/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">I insist on Go Get</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/how-micro-should-the-microservice-be/">
+            <span class="next-text nav-default">How Micro Should the Microservice Be</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="comments-gitment"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/theme-next/theme-next-gitment@1/default.min.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/gh/theme-next/theme-next-gitment@1/gitment.browser.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitment = new Gitment({
+        id: '2018-04-24 20:25:53 \u002b0800 CST',
+        title: 'The Application Which Take a Guard Against Its Teammates Can Bring Higher Availablility',
+        link: decodeURI(location.href),
+        desc: '',
+        owner: 'daymade',
+        repo: 'daymade.github.io',
+        oauth: {
+          client_id: '2761c940a1b02c078229',
+          client_secret: '40d5091e8c7df0654e9cd9ae2a35e1c06dbfd483'
+        }
+      });
+      gitment.render('comments-gitment');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/imsun/gitment">comments powered by gitment.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://twitter.com/finedtune" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/daymade" class="iconfont icon-github" title="github"></a>
+  
+      <a href='/post/the-application-which-take-a-guard-against-its-teammates-can-bring-higher-availablility/index.xml' type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+    
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2013 - 
+    2024<span class="heart"><i class="iconfont icon-heart"></i></span><span>daymade</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+  
+    
+      
+    
+  
+
+
+
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CFV7E7BCN1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CFV7E7BCN1');
+</script>
+
+
+
+
+
+
+</body>
+</html>

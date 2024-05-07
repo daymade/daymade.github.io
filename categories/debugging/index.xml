@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Debugging on 研究研究</title>
+    <link>https://typeof.tech/categories/debugging/</link>
+    <description>Recent content in Debugging on 研究研究</description>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
+    <copyright>daymade</copyright>
+    <lastBuildDate>Fri, 26 Jul 2019 23:09:15 +0800</lastBuildDate>
+    <atom:link href="https://typeof.tech/categories/debugging/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Debugging Stackoverflow Exception in Dotnet Core Using Windbg</title>
+      <link>https://typeof.tech/post/debugging-stackoverflow-exception-in-dotnet-core-using-windbg/</link>
+      <pubDate>Tue, 24 Apr 2018 19:45:42 +0800</pubDate>
+      <guid>https://typeof.tech/post/debugging-stackoverflow-exception-in-dotnet-core-using-windbg/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

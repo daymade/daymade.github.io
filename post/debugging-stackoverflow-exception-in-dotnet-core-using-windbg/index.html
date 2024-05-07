@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Debugging Stackoverflow Exception in Dotnet Core Using Windbg - 研究研究</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="daymade" /><meta name="description" content="debugging windbg" /><meta name="keywords" content="daymade" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.125.4 with theme even" />
+
+
+<link rel="canonical" href="https://typeof.tech/post/debugging-stackoverflow-exception-in-dotnet-core-using-windbg/" />
+  <link href="https://typeof.tech/post/debugging-stackoverflow-exception-in-dotnet-core-using-windbg/index.xml" rel="alternate" type="application/rss+xml" title="研究研究" />
+  <link href="https://typeof.tech/post/debugging-stackoverflow-exception-in-dotnet-core-using-windbg/index.xml" rel="feed" type="application/rss+xml" title="研究研究" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="https://typeof.tech/post/debugging-stackoverflow-exception-in-dotnet-core-using-windbg/">
+  <meta property="og:site_name" content="研究研究">
+  <meta property="og:title" content="Debugging Stackoverflow Exception in Dotnet Core Using Windbg">
+  <meta property="og:description" content="debugging windbg">
+  <meta property="og:locale" content="zh-cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-04-24T19:45:42+08:00">
+    <meta property="article:modified_time" content="2019-07-26T23:09:15+08:00">
+    <meta property="article:tag" content="Debugging">
+    <meta property="article:tag" content="Windbg">
+
+  <meta itemprop="name" content="Debugging Stackoverflow Exception in Dotnet Core Using Windbg">
+  <meta itemprop="description" content="debugging windbg">
+  <meta itemprop="datePublished" content="2018-04-24T19:45:42+08:00">
+  <meta itemprop="dateModified" content="2019-07-26T23:09:15+08:00">
+  <meta itemprop="wordCount" content="1937">
+  <meta itemprop="keywords" content="Debugging,Windbg"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Debugging Stackoverflow Exception in Dotnet Core Using Windbg">
+<meta name="twitter:description" content="debugging windbg">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">研究研究</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">研究研究</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Debugging Stackoverflow Exception in Dotnet Core Using Windbg</h1>
+      <h3 class="post-meta">debugging windbg</h3>
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-24 </span>
+        <span class="more-meta"> daymade </span>
+        
+        <div class="post-category">
+            <a href="/categories/debugging/"> debugging </a>
+            </div>
+          <span class="more-meta"> 约 1937 字 </span>
+          <span class="more-meta"> 预计阅读 10 分钟 </span>
+
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      <h2 id="platform">Platform</h2>
+<ul>
+<li>dotnet core runing on Windows</li>
+<li>lldb</li>
+</ul>
+<h2 id="tools">Tools</h2>
+<ul>
+<li>adplus</li>
+<li>windbg(x64)</li>
+<li>DebugDiag 2 Analysis</li>
+</ul>
+<h2 id="progress">Progress</h2>
+<h3 id="using-adplus-to-create-a-dump-when-process-crashed">Using adplus to create a dump when process crashed</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">adplus.exe -crash -pn dotnet.exe -o d:\ -quiet
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="load-the-dump">load the dump</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">Microsoft <span class="o">(</span>R<span class="o">)</span> Windows Debugger Version 10.0.14321.1024 AMD64
+</span></span><span class="line"><span class="cl">Copyright <span class="o">(</span>c<span class="o">)</span> Microsoft Corporation. All rights reserved.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Loading Dump File <span class="o">[</span>C:<span class="se">\U</span>sers<span class="se">\x</span>xx<span class="se">\D</span>esktop<span class="se">\M</span>INIDUMP_FirstChance_sov_StackOverflow_dotnet.exe__0134_2018-04-20_17-10-29-460_1420.dmp<span class="o">]</span>
+</span></span><span class="line"><span class="cl">Comment: <span class="s1">&#39;FirstChance_sov_StackOverflow&#39;</span>
+</span></span><span class="line"><span class="cl">User Mini Dump File: Only registers, stack and portions of memory are available
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Symbol search path is: srv*
+</span></span><span class="line"><span class="cl">Executable search path is: 
+</span></span><span class="line"><span class="cl">Windows <span class="m">8</span> Version <span class="m">9200</span> MP <span class="o">(</span><span class="m">4</span> procs<span class="o">)</span> Free x64
+</span></span><span class="line"><span class="cl">Product: Server, suite: TerminalServer SingleUserTS
+</span></span><span class="line"><span class="cl">Machine Name:
+</span></span><span class="line"><span class="cl">Debug session time: Fri Apr <span class="m">20</span> 17:10:42.000 <span class="m">2018</span> <span class="o">(</span>UTC + 8:00<span class="o">)</span>
+</span></span><span class="line"><span class="cl">System Uptime: not available
+</span></span><span class="line"><span class="cl">Process Uptime: <span class="m">0</span> days 2:54:11.000
+</span></span><span class="line"><span class="cl">................................................................
+</span></span><span class="line"><span class="cl">................................................................
+</span></span><span class="line"><span class="cl">................................................................
+</span></span><span class="line"><span class="cl">..........................................
+</span></span><span class="line"><span class="cl">This dump file has an exception of interest stored in it.
+</span></span><span class="line"><span class="cl">The stored exception information can be accessed via .ecxr.
+</span></span><span class="line"><span class="cl"><span class="o">(</span>1420.9f4<span class="o">)</span>: Stack overflow - code c00000fd <span class="o">(</span>first/second chance not available<span class="o">)</span>
+</span></span><span class="line"><span class="cl">coreclr!AllocateString+0x2 <span class="o">[</span>inlined in coreclr!StringObject::NewString+0x20<span class="o">]</span>:
+</span></span><span class="line"><span class="cl">00007ffa<span class="sb">`</span>efef9a44 e85715faff      call    coreclr!SlowAllocateString <span class="o">(</span>00007ffa<span class="sb">`</span>efe9afa0<span class="o">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="set-symbols-path">set symbols path</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="mi">0</span><span class="p">:</span><span class="mi">000</span><span class="o">&gt;</span> <span class="o">.</span><span class="n">sympath</span> <span class="n">cache</span><span class="o">*</span><span class="n">c</span><span class="p">:</span>\<span class="n">LocalSymbolsCache</span><span class="p">;</span><span class="n">C</span><span class="p">:</span>\<span class="n">tempServices</span>\<span class="n">Services</span><span class="p">;</span><span class="n">srv</span><span class="o">*</span><span class="n">c</span><span class="p">:</span>\<span class="n">ServerSymbolsCache</span><span class="o">*</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">msdl</span><span class="o">.</span><span class="n">microsoft</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="n">symbols</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Symbol</span> <span class="n">search</span> <span class="n">path</span> <span class="n">is</span><span class="p">:</span> <span class="n">cache</span><span class="o">*</span><span class="n">c</span><span class="p">:</span>\<span class="n">LocalSymbolsCache</span><span class="p">;</span><span class="n">C</span><span class="p">:</span>\<span class="n">tempServices</span>\<span class="n">Services</span><span class="p">;</span><span class="n">srv</span><span class="o">*</span><span class="n">c</span><span class="p">:</span>\<span class="n">ServerSymbolsCache</span><span class="o">*</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">msdl</span><span class="o">.</span><span class="n">microsoft</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="n">symbols</span>
+</span></span><span class="line"><span class="cl"><span class="n">Expanded</span> <span class="n">Symbol</span> <span class="n">search</span> <span class="n">path</span> <span class="n">is</span><span class="p">:</span> <span class="n">cache</span><span class="o">*</span><span class="n">c</span><span class="p">:</span>\<span class="n">localsymbolscache</span><span class="p">;</span><span class="n">c</span><span class="p">:</span>\<span class="n">tempservices</span>\<span class="n">services</span><span class="p">;</span><span class="n">srv</span><span class="o">*</span><span class="n">c</span><span class="p">:</span>\<span class="n">serversymbolscache</span><span class="o">*</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">msdl</span><span class="o">.</span><span class="n">microsoft</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="n">symbols</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">*************</span> <span class="n">Symbol</span> <span class="ne">Path</span> <span class="n">validation</span> <span class="n">summary</span> <span class="o">**************</span>
+</span></span><span class="line"><span class="cl"><span class="n">Response</span>                         <span class="n">Time</span> <span class="p">(</span><span class="n">ms</span><span class="p">)</span>     <span class="n">Location</span>
+</span></span><span class="line"><span class="cl"><span class="n">Deferred</span>                                       <span class="n">cache</span><span class="o">*</span><span class="n">c</span><span class="p">:</span>\<span class="n">LocalSymbolsCache</span>
+</span></span><span class="line"><span class="cl"><span class="n">OK</span>                                             <span class="n">C</span><span class="p">:</span>\<span class="n">tempServices</span>\<span class="n">Services</span>
+</span></span><span class="line"><span class="cl"><span class="n">Deferred</span>                                       <span class="n">srv</span><span class="o">*</span><span class="n">c</span><span class="p">:</span>\<span class="n">ServerSymbolsCache</span><span class="o">*</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">msdl</span><span class="o">.</span><span class="n">microsoft</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="n">symbols</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="load-sos-extensions-for-windbg">load sos extensions for windbg</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="mi">0</span><span class="p">:</span><span class="mi">000</span><span class="o">&gt;</span> <span class="o">.</span><span class="n">load</span> <span class="n">C</span><span class="p">:</span>\<span class="n">Program</span> <span class="n">Files</span>\<span class="n">dotnet</span>\<span class="n">shared</span>\<span class="n">Microsoft</span><span class="o">.</span><span class="n">NETCore</span><span class="o">.</span><span class="n">App</span>\<span class="mf">2.0</span><span class="o">.</span><span class="mi">7</span>\<span class="n">sos</span><span class="o">.</span><span class="n">dll</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">----------------------------------------------------------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="n">The</span> <span class="n">user</span> <span class="n">dump</span> <span class="n">currently</span> <span class="n">examined</span> <span class="n">is</span> <span class="n">a</span> <span class="n">minidump</span><span class="o">.</span> <span class="n">Consequently</span><span class="p">,</span> <span class="n">only</span> <span class="n">a</span> <span class="n">subset</span>
+</span></span><span class="line"><span class="cl"><span class="n">of</span> <span class="n">sos</span><span class="o">.</span><span class="n">dll</span> <span class="n">functionality</span> <span class="n">will</span> <span class="n">be</span> <span class="n">available</span><span class="o">.</span> <span class="n">If</span> <span class="n">needed</span><span class="p">,</span> <span class="n">attaching</span> <span class="n">to</span> <span class="n">the</span> <span class="n">live</span>
+</span></span><span class="line"><span class="cl"><span class="n">process</span> <span class="ow">or</span> <span class="n">debugging</span> <span class="n">a</span> <span class="n">full</span> <span class="n">dump</span> <span class="n">will</span> <span class="n">allow</span> <span class="n">access</span> <span class="n">to</span> <span class="n">sos</span><span class="o">.</span><span class="n">dll</span><span class="s1">&#39;s full feature</span>
+</span></span><span class="line"><span class="cl"><span class="n">set</span><span class="o">.</span>
+</span></span><span class="line"><span class="cl"><span class="n">To</span> <span class="n">create</span> <span class="n">a</span> <span class="n">full</span> <span class="n">user</span> <span class="n">dump</span> <span class="n">use</span> <span class="n">the</span> <span class="n">command</span><span class="p">:</span> <span class="o">.</span><span class="n">dump</span> <span class="o">/</span><span class="n">ma</span> <span class="o">&lt;</span><span class="n">filename</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">----------------------------------------------------------------------------</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="mi">0</span><span class="p">:</span><span class="mi">000</span><span class="o">&gt;</span> <span class="o">.</span><span class="n">symfix</span>
+</span></span><span class="line"><span class="cl"><span class="mi">0</span><span class="p">:</span><span class="mi">000</span><span class="o">&gt;</span> <span class="o">.</span><span class="n">reload</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="try-to-analyze-problems-automatically">try to analyze problems automatically</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="mi">0</span><span class="p">:</span><span class="mi">000</span><span class="o">&gt;</span> <span class="o">!</span><span class="n">analyze</span> <span class="o">-</span><span class="n">v</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">*******************************************************************************</span>
+</span></span><span class="line"><span class="cl"><span class="o">*</span>                                                                             <span class="o">*</span>
+</span></span><span class="line"><span class="cl"><span class="o">*</span>                        <span class="n">Exception</span> <span class="n">Analysis</span>                                   <span class="o">*</span>
+</span></span><span class="line"><span class="cl"><span class="o">*</span>                                                                             <span class="o">*</span>
+</span></span><span class="line"><span class="cl"><span class="o">*******************************************************************************</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">***</span> <span class="n">WARNING</span><span class="p">:</span> <span class="n">Unable</span> <span class="n">to</span> <span class="n">verify</span> <span class="n">timestamp</span> <span class="k">for</span> <span class="n">libuv</span><span class="o">.</span><span class="n">dll</span>
+</span></span><span class="line"><span class="cl"><span class="o">***</span> <span class="n">ERROR</span><span class="p">:</span> <span class="n">Module</span> <span class="nb">load</span> <span class="n">completed</span> <span class="n">but</span> <span class="n">symbols</span> <span class="n">could</span> <span class="ow">not</span> <span class="n">be</span> <span class="n">loaded</span> <span class="k">for</span> <span class="n">libuv</span><span class="o">.</span><span class="n">dll</span>
+</span></span><span class="line"><span class="cl"><span class="n">GetUrlPageData2</span> <span class="p">(</span><span class="n">WinHttp</span><span class="p">)</span> <span class="n">failed</span><span class="p">:</span> <span class="mf">12002.</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">...</span><span class="n">remove</span> <span class="n">lines</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">EXCEPTION_RECORD</span><span class="p">:</span>  <span class="p">(</span><span class="o">.</span><span class="n">exr</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ExceptionAddress</span><span class="p">:</span> <span class="mi">00007</span><span class="n">ffaefef9a44</span> <span class="p">(</span><span class="n">coreclr</span><span class="o">!</span><span class="n">AllocateString</span><span class="o">+</span><span class="mh">0x0000000000000002</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">   <span class="n">ExceptionCode</span><span class="p">:</span> <span class="n">c00000fd</span> <span class="p">(</span><span class="n">Stack</span> <span class="n">overflow</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">ExceptionFlags</span><span class="p">:</span> <span class="mi">00000000</span>
+</span></span><span class="line"><span class="cl"><span class="n">NumberParameters</span><span class="p">:</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl">   <span class="n">Parameter</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="mi">0000000000000001</span>
+</span></span><span class="line"><span class="cl">   <span class="n">Parameter</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="mi">000000</span><span class="n">fadfbc3ff8</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">DEFAULT_BUCKET_ID</span><span class="p">:</span>  <span class="n">STACK_OVERFLOW_DATA</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">PROCESS_NAME</span><span class="p">:</span>  <span class="n">dotnet</span><span class="o">.</span><span class="n">exe</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">MANAGED_ENGINE_MODULE</span><span class="p">:</span>  <span class="n">coreclr</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">MANAGED_ANALYSIS_PROVIDER</span><span class="p">:</span>  <span class="n">SOS</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">MANAGED_THREAD_ID</span><span class="p">:</span> <span class="mi">9</span><span class="n">f4</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">STACK_OVERFLOW</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Tid</span>    <span class="p">[</span><span class="mh">0x31</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Frame</span>  <span class="p">[</span><span class="mh">0x00</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">DATA</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Tid</span>    <span class="p">[</span><span class="mh">0x9f4</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Failure</span> <span class="n">Bucketing</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">...</span><span class="n">remove</span> <span class="n">lines</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Tid 0x31 (49 for decimal) has an stack overflow exception, which caused the application to exit abnormally.</p>
+<h3 id="print-all-threads">print all threads</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">0:000&gt; !threads
+</span></span><span class="line"><span class="cl">ThreadCount:      57
+</span></span><span class="line"><span class="cl">UnstartedThread:  0
+</span></span><span class="line"><span class="cl">BackgroundThread: 53
+</span></span><span class="line"><span class="cl">PendingThread:    0
+</span></span><span class="line"><span class="cl">DeadThread:       3
+</span></span><span class="line"><span class="cl">Hosted Runtime:   no
+</span></span><span class="line"><span class="cl">                                                                                                        Lock  
+</span></span><span class="line"><span class="cl">       ID OSID ThreadOBJ           State GC Mode     GC Alloc Context                  Domain           Count Apt Exception
+</span></span><span class="line"><span class="cl">   0    1 1824 0000028d2fccfb90    2a020 Preemptive  0000000000000000:0000000000000000 0000028d2feb19f0 1     Ukn 
+</span></span><span class="line"><span class="cl">   2    2 146c 0000028d2fcc8fb0    2b220 Preemptive  0000028D35170278:0000028D35172220 0000028d2feb19f0 0     Ukn (Finalizer) 
+</span></span><span class="line"><span class="cl">   5    3  b40 0000028d2fd650c0  1029220 Preemptive  0000000000000000:0000000000000000 0000028d2feb19f0 0     Ukn (Threadpool Worker) r) 
+</span></span><span class="line"><span class="cl">  48   57 1120 0000028d4ae2b9b0  1029220 Preemptive  0000000000000000:0000000000000000 0000028d2feb19f0 0     Ukn (Threadpool Worker) 
+</span></span><span class="line"><span class="cl">  49   43  9f4 0000028d4a33e910  1029220 Cooperative 0000028D354EB360:0000028D354EBFD0 0000028d2feb19f0 0     Ukn (Threadpool Worker) 
+</span></span><span class="line"><span class="cl">  50   59 1a10 0000028d4ae4ca80  1029220 Preemptive  0000000000000000:0000000000000000 0000028d2feb19f0 0     Ukn (Threadpool Worker) 
+</span></span><span class="line"><span class="cl">XXXX   20    0 0000028d4ac519f0    39820 Preemptive  0000000000000000:0000000000000000 0000028d2feb19f0 0     Ukn 
+</span></span><span class="line"><span class="cl">XXXX   64    0 0000028d4a341020    39820 Preemptive  0000000000000000:0000000000000000 0000028d2feb19f0 0     Ukn 
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="switch-to-specical-thread-context">switch to specical thread context</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">0:000&gt; ~~[9f4]s
+</span></span><span class="line"><span class="cl">coreclr!AllocateString+0x2 [inlined in coreclr!StringObject::NewString+0x20]:
+</span></span><span class="line"><span class="cl">00007ffa`efef9a44 e85715faff      call    coreclr!SlowAllocateString (00007ffa`efe9afa0)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="print-clr-managed-stack">print clr managed stack</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">0:049&gt; !clrstack
+</span></span><span class="line"><span class="cl">OS Thread Id: 0x9f4 (49)
+</span></span><span class="line"><span class="cl">        Child SP               IP Call Site
+</span></span><span class="line"><span class="cl">000000fadfbc4458 00007ffaefef9a44 [HelperMethodFrame_PROTECTOBJ: 000000fadfbc4458] System.Number.FormatInt64(Int64, System.String, System.Globalization.NumberFormatInfo)
+</span></span><span class="line"><span class="cl">000000fadfbc4590 00007ffa91992cc6 xxx.LinePackageSalePrice+c__DisplayClass4_1.b__1(xxx.BookResourceInfo)
+</span></span><span class="line"><span class="cl">000000fadfbc45d0 00007ffaf992b16f System.Linq.Enumerable.TryGetFirst[[System.__Canon, System.Private.CoreLib]](System.Collections.Generic.IEnumerable`1, System.Func`2, Boolean ByRef)
+</span></span><span class="line"><span class="cl">000000fadfbc4640 00007ffa914fd0d2 xxx.LinePackageSalePrice.IsPackageB(xxx.GetLinePackageSalePriceRequest, System.Collections.Generic.List`1, System.Collections.Generic.List`1, Int64, Int32)
+</span></span><span class="line"><span class="cl">000000fadfbc4730 00007ffa914fd121 xxx.LinePackageSalePrice.IsPackageB(xxx.GetLinePackageSalePriceRequest, System.Collections.Generic.List`1, System.Collections.Generic.List`1, Int64, Int32)
+</span></span><span class="line"><span class="cl">... removed 6k lines duplicated
+</span></span><span class="line"><span class="cl">000000fadfd3d080 00007ffa914fd121 xxx.LinePackageSalePrice.IsPackageB(xxx.GetLinePackageSalePriceRequest, System.Collections.Generic.List`1, System.Collections.Generic.List`1, Int64, Int32)
+</span></span><span class="line"><span class="cl">000000fadfd3d170 00007ffa914fd121 xxx.LinePackageSalePrice.IsPackageB(xxx.GetLinePackageSalePriceRequest, System.Collections.Generic.List`1, System.Collections.Generic.List`1, Int64, Int32)
+</span></span><span class="line"><span class="cl">000000fadfd3d260 00007ffa914fca97 xxx.LinePackageSalePrice.IsPackage(xxx.GetLinePackageSalePriceRequest, System.Collections.Generic.List`1, System.Collections.Generic.List`1 ByRef, Int32 ByRef)
+</span></span><span class="line"><span class="cl">000000fadfd3d3c0 00007ffa914fb5a1 xxx.LinePackageSalePrice.GetLinePackageSalePrice(xxx.GetLinePackageSalePriceRequest)
+</span></span><span class="line"><span class="cl">000000fadfd3d5b0 00007ffa90f16efe xxx.InitResponse[[System.__Canon, System.Private.CoreLib],[System.__Canon, System.Private.CoreLib]](System.Func`2&gt;, System.__Canon, System.String, System.String, System.String, System.String, System.String)
+</span></span><span class="line"><span class="cl">000000fadfd3d690 00007ffa914fb154 xxx.GetLinePackageSalePrice(xxx.GetLinePackageSalePriceRequest)
+</span></span><span class="line"><span class="cl">000000fadfd3d890 00007ffaeff735f3 [DebuggerU2MCatchHandlerFrame: 000000fadfd3d890] 
+</span></span><span class="line"><span class="cl">000000fadfd3dc28 00007ffaeff735f3 [HelperMethodFrame_PROTECTOBJ: 000000fadfd3dc28] System.RuntimeMethodHandle.InvokeMethod(System.Object, System.Object[], System.Signature, Boolean)
+</span></span><span class="line"><span class="cl">000000fadfd3e770 00007ffae07e7299 System.Threading.ThreadPoolWorkQueue.Dispatch() [E:\A\_work\805\s\src\mscorlib\src\System\Threading\ThreadPool.cs @ 582]
+</span></span><span class="line"><span class="cl">000000fadfd3ec70 00007ffaeff735f3 [DebuggerU2MCatchHandlerFrame: 000000fadfd3ec70] 
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="print-clr-managed-stackwith-parameters-information">print clr managed stack(with parameters information)</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">0:049&gt; !clrstack -p
+</span></span><span class="line"><span class="cl">OS Thread Id: 0x9f4 (49)
+</span></span><span class="line"><span class="cl">        Child SP               IP Call Site
+</span></span><span class="line"><span class="cl">000000fadfbc4458 00007ffaefef9a44 [HelperMethodFrame_PROTECTOBJ: 000000fadfbc4458] System.Number.FormatInt64(Int64, System.String, System.Globalization.NumberFormatInfo)
+</span></span><span class="line"><span class="cl">000000fadfbc4590 00007ffa91992cc6 xxx.LinePackageSalePrice+c__DisplayClass4_1.b__1(xxx.BookResourceInfo)
+</span></span><span class="line"><span class="cl">    PARAMETERS:
+</span></span><span class="line"><span class="cl">        this = &lt;no data&gt;
+</span></span><span class="line"><span class="cl">        x = &lt;no data&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">000000fadfbc45d0 00007ffaf992b16f System.Linq.Enumerable.TryGetFirst[[System.__Canon, System.Private.CoreLib]](System.Collections.Generic.IEnumerable`1, System.Func`2, Boolean ByRef)
+</span></span><span class="line"><span class="cl">    PARAMETERS:
+</span></span><span class="line"><span class="cl">        source = &lt;no data&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">000000fadfbc4640 00007ffa914fd0d2 xxx.LinePackageSalePrice.IsPackageB(xxx.GetLinePackageSalePriceRequest, System.Collections.Generic.List`1, System.Collections.Generic.List`1, Int64, Int32)
+</span></span><span class="line"><span class="cl">    PARAMETERS:
+</span></span><span class="line"><span class="cl">        this (&lt;CLR reg&gt;) = 0x0000028d3513d7f0
+</span></span><span class="line"><span class="cl">        request (&lt;CLR reg&gt;) = 0x0000028d3513d478
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">000000fadfd3d080 00007ffa914fd121 xxx.LinePackageSalePrice.IsPackageB(xxx.GetLinePackageSalePriceRequest, System.Collections.Generic.List`1, System.Collections.Generic.List`1, Int64, Int32)
+</span></span><span class="line"><span class="cl">    PARAMETERS:
+</span></span><span class="line"><span class="cl">        this = &lt;no data&gt;
+</span></span><span class="line"><span class="cl">        request = &lt;no data&gt;
+</span></span><span class="line"><span class="cl">		
+</span></span><span class="line"><span class="cl">... removed many lines duplicated
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">000000fadfd3d080 00007ffa914fd121 xxx.LinePackageSalePrice.IsPackageB(xxx.GetLinePackageSalePriceRequest, System.Collections.Generic.List`1, System.Collections.Generic.List`1, Int64, Int32)
+</span></span><span class="line"><span class="cl">    PARAMETERS:
+</span></span><span class="line"><span class="cl">        this = &lt;no data&gt;
+</span></span><span class="line"><span class="cl">        request = &lt;no data&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">000000fadfd3d170 00007ffa914fd121 xxx.LinePackageSalePrice.IsPackageB(xxx.GetLinePackageSalePriceRequest, System.Collections.Generic.List`1, System.Collections.Generic.List`1, Int64, Int32)
+</span></span><span class="line"><span class="cl">    PARAMETERS:
+</span></span><span class="line"><span class="cl">        this = &lt;no data&gt;
+</span></span><span class="line"><span class="cl">        request = &lt;no data&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">000000fadfd3d260 00007ffa914fca97 xxx.LinePackageSalePrice.IsPackage(xxx.GetLinePackageSalePriceRequest, System.Collections.Generic.List`1, System.Collections.Generic.List`1 ByRef, Int32 ByRef)
+</span></span><span class="line"><span class="cl">    PARAMETERS:
+</span></span><span class="line"><span class="cl">        this = &lt;no data&gt;
+</span></span><span class="line"><span class="cl">        request = &lt;no data&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">000000fadfd3d3c0 00007ffa914fb5a1 xxx.LinePackageSalePrice.GetLinePackageSalePrice(xxx.GetLinePackageSalePriceRequest)
+</span></span><span class="line"><span class="cl">    PARAMETERS:
+</span></span><span class="line"><span class="cl">        this (&lt;CLR reg&gt;) = 0x0000028d3513d7f0
+</span></span><span class="line"><span class="cl">        request (&lt;CLR reg&gt;) = 0x0000028d3513d478
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">000000fadfd3d5b0 00007ffa90f16efe xxx.InitResponse[[System.__Canon, System.Private.CoreLib],[System.__Canon, System.Private.CoreLib]](System.Func`2&gt;, System.__Canon, System.String, System.String, System.String, System.String, System.String)
+</span></span><span class="line"><span class="cl">    PARAMETERS:
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">000000fadfd3d690 00007ffa914fb154 xxx.LineService.GetLinePackageSalePrice(xxx.GetLinePackageSalePriceRequest)
+</span></span><span class="line"><span class="cl">    PARAMETERS:
+</span></span><span class="line"><span class="cl">        this = &lt;no data&gt;
+</span></span><span class="line"><span class="cl">        request = &lt;no data&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">000000fadfd3e700 00007ffae071b64e System.Threading.ExecutionContext.Run(System.Threading.ExecutionContext, System.Threading.ContextCallback, System.Object) [E:\A\_work\805\s\src\mscorlib\shared\System\Threading\ExecutionContext.cs @ 145]
+</span></span><span class="line"><span class="cl">    PARAMETERS:
+</span></span><span class="line"><span class="cl">        executionContext = &lt;no data&gt;
+</span></span><span class="line"><span class="cl">        callback = &lt;no data&gt;
+</span></span><span class="line"><span class="cl">        state = &lt;no data&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">000000fadfd3e770 00007ffae07e7299 System.Threading.ThreadPoolWorkQueue.Dispatch() [E:\A\_work\805\s\src\mscorlib\src\System\Threading\ThreadPool.cs @ 582]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">000000fadfd3ec70 00007ffaeff735f3 [DebuggerU2MCatchHandlerFrame: 000000fadfd3ec70] 
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="dump-object-by-address">dump object by address</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">0:049&gt; !do 0x0000028d3513d478
+</span></span><span class="line"><span class="cl">&lt;Note: this object has an invalid CLASS field&gt;
+</span></span><span class="line"><span class="cl">Invalid object
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>failed,</p>
+<h3 id="dump-value-type-by-method-table-and-address">dump value type by method table and address</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">0:049&gt; !dumpvc 000000fadfbc4640 0x0000028d3513d478
+</span></span><span class="line"><span class="cl">Not a managed object
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>failed</p>
+<h3 id="see-whats-on-the-heap">see what&rsquo;s on the heap</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">0:049&gt; !dumpheap -stat
+</span></span><span class="line"><span class="cl">Error requesting heap segment 0000028d417e0000
+</span></span><span class="line"><span class="cl">Failed to retrieve segments for gc heap
+</span></span><span class="line"><span class="cl">Unable to build snapshot of the garbage collector state
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>&hellip;Ok we still have a full dump</p>
+<h3 id="load-full-dump-file">load full dump file</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="mi">0</span><span class="p">:</span><span class="mi">000</span><span class="o">&gt;</span> <span class="o">.</span><span class="n">sympath</span> <span class="n">cache</span><span class="o">*</span><span class="n">c</span><span class="p">:</span>\<span class="n">LocalSymbolsCache</span><span class="p">;</span><span class="n">C</span><span class="p">:</span>\<span class="n">tempServices</span>\<span class="n">Services</span><span class="p">;</span><span class="n">srv</span><span class="o">*</span><span class="n">c</span><span class="p">:</span>\<span class="n">ServerSymbolsCache</span><span class="o">*</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">msdl</span><span class="o">.</span><span class="n">microsoft</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="n">symbols</span>
+</span></span><span class="line"><span class="cl"><span class="n">Symbol</span> <span class="n">search</span> <span class="n">path</span> <span class="n">is</span><span class="p">:</span> <span class="n">cache</span><span class="o">*</span><span class="n">c</span><span class="p">:</span>\<span class="n">LocalSymbolsCache</span><span class="p">;</span><span class="n">C</span><span class="p">:</span>\<span class="n">tempServices</span>\<span class="n">Services</span><span class="p">;</span><span class="n">srv</span><span class="o">*</span><span class="n">c</span><span class="p">:</span>\<span class="n">ServerSymbolsCache</span><span class="o">*</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">msdl</span><span class="o">.</span><span class="n">microsoft</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="n">symbols</span>
+</span></span><span class="line"><span class="cl"><span class="n">Expanded</span> <span class="n">Symbol</span> <span class="n">search</span> <span class="n">path</span> <span class="n">is</span><span class="p">:</span> <span class="n">cache</span><span class="o">*</span><span class="n">c</span><span class="p">:</span>\<span class="n">localsymbolscache</span><span class="p">;</span><span class="n">c</span><span class="p">:</span>\<span class="n">tempservices</span>\<span class="n">services</span><span class="p">;</span><span class="n">srv</span><span class="o">*</span><span class="n">c</span><span class="p">:</span>\<span class="n">serversymbolscache</span><span class="o">*</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">msdl</span><span class="o">.</span><span class="n">microsoft</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="n">symbols</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">*************</span> <span class="n">Symbol</span> <span class="ne">Path</span> <span class="n">validation</span> <span class="n">summary</span> <span class="o">**************</span>
+</span></span><span class="line"><span class="cl"><span class="n">Response</span>                         <span class="n">Time</span> <span class="p">(</span><span class="n">ms</span><span class="p">)</span>     <span class="n">Location</span>
+</span></span><span class="line"><span class="cl"><span class="n">Deferred</span>                                       <span class="n">cache</span><span class="o">*</span><span class="n">c</span><span class="p">:</span>\<span class="n">LocalSymbolsCache</span>
+</span></span><span class="line"><span class="cl"><span class="n">OK</span>                                             <span class="n">C</span><span class="p">:</span>\<span class="n">tempServices</span>\<span class="n">Services</span>
+</span></span><span class="line"><span class="cl"><span class="n">Deferred</span>                                       <span class="n">srv</span><span class="o">*</span><span class="n">c</span><span class="p">:</span>\<span class="n">ServerSymbolsCache</span><span class="o">*</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">msdl</span><span class="o">.</span><span class="n">microsoft</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="n">symbols</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="mi">0</span><span class="p">:</span><span class="mi">000</span><span class="o">&gt;</span> <span class="o">.</span><span class="n">loadby</span> <span class="n">sos</span> <span class="n">coreclr</span>
+</span></span><span class="line"><span class="cl"><span class="mi">0</span><span class="p">:</span><span class="mi">000</span><span class="o">&gt;</span> <span class="o">.</span><span class="n">reload</span>
+</span></span><span class="line"><span class="cl"><span class="o">................................................................</span>
+</span></span><span class="line"><span class="cl"><span class="o">................................................................</span>
+</span></span><span class="line"><span class="cl"><span class="o">................................................................</span>
+</span></span><span class="line"><span class="cl"><span class="o">..........................................</span>
+</span></span><span class="line"><span class="cl"><span class="n">Loading</span> <span class="n">unloaded</span> <span class="n">module</span> <span class="n">list</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">0:000&gt; !dumpheap -stat
+</span></span><span class="line"><span class="cl">Statistics:
+</span></span><span class="line"><span class="cl">              MT    Count    TotalSize Class Name
+</span></span><span class="line"><span class="cl">00007ffae0b4f9a8        1           24 System.Collections.Generic.GenericComparer`1[[System.UInt64, System.Private.CoreLib]]
+</span></span><span class="line"><span class="cl">00007ffa918de1c0        1           24 xxx.ZBYLineProductSpecialPricePolicyModel[]
+</span></span><span class="line"><span class="cl">00007ffa918dd6e0        1           24 xxx.Line.ResourcePolicyUseInfo[]
+</span></span><span class="line"><span class="cl">00007ffa908b81c0        1           72 xxx.Line.GetLinePackageSalePriceRequest
+</span></span><span class="line"><span class="cl">...removed lines 
+</span></span><span class="line"><span class="cl">00007ffae0ab5300      117        14336 System.Type[]
+</span></span><span class="line"><span class="cl">00007ffa916cebb0     6432       257280 System.Collections.Generic.List`1[[xxx.ZBYLineProductPolicyRelationModel, xxx]]
+</span></span><span class="line"><span class="cl">00007ffa91711ef0     6433       360200 xxx.ZBYLineProductPolicyRelationModel[]
+</span></span><span class="line"><span class="cl">0000028d2fd88890    25244     18863634      Free
+</span></span><span class="line"><span class="cl">Total 356948 objects
+</span></span><span class="line"><span class="cl">Fragmented blocks larger than 0.5 MB:
+</span></span><span class="line"><span class="cl">            Addr     Size      Followed by
+</span></span><span class="line"><span class="cl">0000028d3511ada8    0.6MB 0000028d351ac668 System.IntPtr[]
+</span></span><span class="line"><span class="cl">0000028d351ac690    0.9MB 0000028d352918c8 System.IntPtr[]
+</span></span><span class="line"><span class="cl">0000028d35291918    2.4MB 0000028d354f8110 System.Byte[]
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="dumpheap--mt-can-extract-the-address-of-an-object-from-method-table">dumpheap -mt can extract the address of an object from method table</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">0:000&gt; !DumpHeap /d -mt 00007ffa908b81c0
+</span></span><span class="line"><span class="cl">         Address               MT     Size
+</span></span><span class="line"><span class="cl">0000028d34e053c0 00007ffa908b81c0       72     
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Statistics:
+</span></span><span class="line"><span class="cl">              MT    Count    TotalSize Class Name
+</span></span><span class="line"><span class="cl">00007ffa908b81c0        1           72 xxx.Line.GetLinePackageSalePriceRequest
+</span></span><span class="line"><span class="cl">Total 1 objects
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">0:000&gt; !do 0000028d34e053c0
+</span></span><span class="line"><span class="cl">Name:        xxx.Line.GetLinePackageSalePriceRequest
+</span></span><span class="line"><span class="cl">MethodTable: 00007ffa908b81c0
+</span></span><span class="line"><span class="cl">EEClass:     00007ffa908dbeb0
+</span></span><span class="line"><span class="cl">Size:        72(0x48) bytes
+</span></span><span class="line"><span class="cl">File:        C:\app\Services\xxx.dll
+</span></span><span class="line"><span class="cl">Fields:
+</span></span><span class="line"><span class="cl">              MT    Field   Offset                 Type VT     Attr            Value Name
+</span></span><span class="line"><span class="cl">00007ffae0ae8020  4000006        8        System.String  0 instance 0000028d34e05670 &lt;OperCode&gt;k__BackingField
+</span></span><span class="line"><span class="cl">00007ffae0ae8020  4000007       10        System.String  0 instance 0000028d34e05690 &lt;OperName&gt;k__BackingField
+</span></span><span class="line"><span class="cl">00007ffae0ae8020  400076c       18        System.String  0 instance 0000028d34e056b0 &lt;ChannelKey&gt;k__BackingField
+</span></span><span class="line"><span class="cl">00007ffae0ae8020  4000513       20        System.String  0 instance 0000028d34e05408 &lt;LineId&gt;k__BackingField
+</span></span><span class="line"><span class="cl">00007ffae01d7168  4000514       28 ...Private.CoreLib]]  0 instance 0000028d34e05430 &lt;LinePackageIds&gt;k__BackingField
+</span></span><span class="line"><span class="cl">00007ffae0aeb5f0  4000515       38      System.DateTime  1 instance 0000028d34e053f8 &lt;BookDate&gt;k__BackingField
+</span></span><span class="line"><span class="cl">00007ffa90d58ab8  4000516       30 ...frontend.Entity]]  0 instance 0000028d34e054e0 &lt;BookResourceInfos&gt;k__BackingField
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">0:000&gt; !do 0000028d34e05408
+</span></span><span class="line"><span class="cl">Name:        System.String
+</span></span><span class="line"><span class="cl">MethodTable: 00007ffae0ae8020
+</span></span><span class="line"><span class="cl">EEClass:     00007ffae027a250
+</span></span><span class="line"><span class="cl">Size:        36(0x24) bytes
+</span></span><span class="line"><span class="cl">File:        C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.0.7\System.Private.CoreLib.dll
+</span></span><span class="line"><span class="cl">String:      70277
+</span></span><span class="line"><span class="cl">Fields:
+</span></span><span class="line"><span class="cl">              MT    Field   Offset                 Type VT     Attr            Value Name
+</span></span><span class="line"><span class="cl">00007ffae0b066d8  4000218        8         System.Int32  1 instance                5 m_stringLength
+</span></span><span class="line"><span class="cl">00007ffae0ae8268  4000219        c          System.Char  1 instance               37 m_firstChar
+</span></span><span class="line"><span class="cl">00007ffae0ae8020  400021a       78        System.String  0   shared           static Empty
+</span></span><span class="line"><span class="cl">                                 &gt;&gt; Domain:Value  0000028d2feb19f0:NotInit  &lt;&lt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">0:000&gt; !do 0000028d34e05430
+</span></span><span class="line"><span class="cl">Name:        System.Collections.Generic.List`1[[System.String, System.Private.CoreLib]]
+</span></span><span class="line"><span class="cl">MethodTable: 00007ffae01d7168
+</span></span><span class="line"><span class="cl">EEClass:     00007ffae022d868
+</span></span><span class="line"><span class="cl">Size:        40(0x28) bytes
+</span></span><span class="line"><span class="cl">File:        C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.0.7\System.Private.CoreLib.dll
+</span></span><span class="line"><span class="cl">Fields:
+</span></span><span class="line"><span class="cl">              MT    Field   Offset                 Type VT     Attr            Value Name
+</span></span><span class="line"><span class="cl">00007ffae0ab3018  4001682        8     System.__Canon[]  0 instance 0000028d34e05480 _items
+</span></span><span class="line"><span class="cl">00007ffae0b066d8  4001683       18         System.Int32  1 instance                2 _size
+</span></span><span class="line"><span class="cl">00007ffae0b066d8  4001684       1c         System.Int32  1 instance                2 _version
+</span></span><span class="line"><span class="cl">00007ffae0aeb370  4001685       10        System.Object  0 instance 0000000000000000 _syncRoot
+</span></span><span class="line"><span class="cl">00007ffae0ab3018  4001686        0     System.__Canon[]  0   shared           static _emptyArray
+</span></span><span class="line"><span class="cl">                                 &gt;&gt; Domain:Value  0000028d2feb19f0:NotInit  &lt;&lt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="dump-array-should-be-used-when-the-object-is-an-array">dump array should be used when the object is an array</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">0:000&gt; !da 0000028d34e05480
+</span></span><span class="line"><span class="cl">Name:        System.String[]
+</span></span><span class="line"><span class="cl">MethodTable: 00007ffae0ab2d20
+</span></span><span class="line"><span class="cl">EEClass:     00007ffae0272a00
+</span></span><span class="line"><span class="cl">Size:        56(0x38) bytes
+</span></span><span class="line"><span class="cl">Array:       Rank 1, Number of elements 4, Type CLASS
+</span></span><span class="line"><span class="cl">Element Methodtable: 00007ffae0ae8020
+</span></span><span class="line"><span class="cl">[0] 0000028d34e05458
+</span></span><span class="line"><span class="cl">[1] 0000028d34e054b8
+</span></span><span class="line"><span class="cl">[2] null
+</span></span><span class="line"><span class="cl">[3] null
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">0:000&gt; !do 0000028d34e05458
+</span></span><span class="line"><span class="cl">Name:        System.String
+</span></span><span class="line"><span class="cl">MethodTable: 00007ffae0ae8020
+</span></span><span class="line"><span class="cl">EEClass:     00007ffae027a250
+</span></span><span class="line"><span class="cl">Size:        40(0x28) bytes
+</span></span><span class="line"><span class="cl">File:        C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.0.7\System.Private.CoreLib.dll
+</span></span><span class="line"><span class="cl">String:      1671849
+</span></span><span class="line"><span class="cl">Fields:
+</span></span><span class="line"><span class="cl">              MT    Field   Offset                 Type VT     Attr            Value Name
+</span></span><span class="line"><span class="cl">00007ffae0b066d8  4000218        8         System.Int32  1 instance                7 m_stringLength
+</span></span><span class="line"><span class="cl">00007ffae0ae8268  4000219        c          System.Char  1 instance               31 m_firstChar
+</span></span><span class="line"><span class="cl">00007ffae0ae8020  400021a       78        System.String  0   shared           static Empty
+</span></span><span class="line"><span class="cl">                                 &gt;&gt; Domain:Value  0000028d2feb19f0:NotInit  &lt;&lt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="datetime-is-a-little-difficult-to-calculate">datetime is a little difficult to calculate</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">0:000&gt; !dumpvc 00007ffae0aeb5f0  0000028d34e053f8
+</span></span><span class="line"><span class="cl">Name:        System.DateTime
+</span></span><span class="line"><span class="cl">MethodTable: 00007ffae0aeb5f0
+</span></span><span class="line"><span class="cl">EEClass:     00007ffae027b688
+</span></span><span class="line"><span class="cl">Size:        24(0x18) bytes
+</span></span><span class="line"><span class="cl">File:        C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.0.7\System.Private.CoreLib.dll
+</span></span><span class="line"><span class="cl">Fields:
+</span></span><span class="line"><span class="cl">              MT    Field   Offset                 Type VT     Attr            Value Name
+</span></span><span class="line"><span class="cl">00007ffae0b12568  400025c        0        System.UInt64  1 instance 636628896000000000 _dateData
+</span></span><span class="line"><span class="cl">00007ffae0ab4590  400024d       98       System.Int32[]  0   shared           static s_daysToMonth365
+</span></span><span class="line"><span class="cl">                                 &gt;&gt; Domain:Value  0000028d2feb19f0:NotInit  &lt;&lt;
+</span></span><span class="line"><span class="cl">00007ffae0ab4590  400024e       a0       System.Int32[]  0   shared           static s_daysToMonth366
+</span></span><span class="line"><span class="cl">                                 &gt;&gt; Domain:Value  0000028d2feb19f0:NotInit  &lt;&lt;
+</span></span><span class="line"><span class="cl">00007ffae0aeb5f0  400024f       88      System.DateTime  1   shared           static MinValue
+</span></span><span class="line"><span class="cl">                                 &gt;&gt; Domain:Value  0000028d2feb19f0:NotInit  &lt;&lt;
+</span></span><span class="line"><span class="cl">00007ffae0aeb5f0  4000250       90      System.DateTime  1   shared           static MaxValue
+</span></span><span class="line"><span class="cl">                                 &gt;&gt; Domain:Value  0000028d2feb19f0:NotInit  &lt;&lt;
+</span></span><span class="line"><span class="cl">								 
+</span></span><span class="line"><span class="cl">0:000&gt; ?0n636628896000000000 &amp; 0x3FFFFFFFFFFFFFFF
+</span></span><span class="line"><span class="cl">Evaluate expression: 636628896000000000 = 08d5c29b`9fd44000
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">0:000&gt; .formats 08d5c29b`9fd44000
+</span></span><span class="line"><span class="cl">Evaluate expression:
+</span></span><span class="line"><span class="cl">  Hex:     08d5c29b`9fd44000
+</span></span><span class="line"><span class="cl">  Decimal: 636628896000000000
+</span></span><span class="line"><span class="cl">  Octal:   0043256051563765040000
+</span></span><span class="line"><span class="cl">  Binary:  00001000 11010101 11000010 10011011 10011111 11010100 01000000 00000000
+</span></span><span class="line"><span class="cl">  Chars:   ......@.
+</span></span><span class="line"><span class="cl">  Time:    Sat May 26 08:00:00.000 3618 (UTC + 8:00)
+</span></span><span class="line"><span class="cl">  Float:   low -8.98914e-020 high 1.28652e-033
+</span></span><span class="line"><span class="cl">  Double:  4.2178e-266
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Now we have extracted entities which the stack overflow exception caused by:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">	LineId: 70277
+</span></span><span class="line"><span class="cl">	LinePackageIds: [1671849,1483157]
+</span></span><span class="line"><span class="cl">	BookDate: Sat May 26 08:00:00.000 3618 (UTC + 8:00)
+</span></span><span class="line"><span class="cl">	BookResourceInfos: [{ResourceId:&#34;232055&#34;,PolicyId:&#34;516654841997590528&#34;, Date:&#34;Sat May 26 08:00:00.000 3618 (UTC + 8:00)&#34;},{232055, 516654841997590528, Sat May 26 08:00:00.000 3618 (UTC + 8:00)}]
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>and the stack-overflowed function:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">xxx.LinePackageSalePrice.IsPackageB
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Done!</p>
+<h2 id="concolusion">Concolusion:</h2>
+<ul>
+<li>.sympath cache<em>c:\LocalSymbolsCache;C:\tempServices\Services;srv</em>c:\ServerSymbolsCache*<a href="https://msdl.microsoft.com/download/symbols">https://msdl.microsoft.com/download/symbols</a></li>
+<li>.load C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.0.7\sos.dll</li>
+<li>.loadby sos coreclr</li>
+<li>.symfix</li>
+<li>.reload</li>
+<li>!analyze -v</li>
+<li>!threads</li>
+<li>~~[9f4]s</li>
+<li>~49s</li>
+<li>!clrstack</li>
+<li>!clrstack -p</li>
+<li>!dumpheap -stat</li>
+<li>!DumpHeap /d -mt 00007ffa908b81c0</li>
+<li>!do 0000028d34e05408</li>
+<li>!da 0000028d34e05480</li>
+<li>!dumpvc 00007ffae0aeb5f0  0000028d34e053f8</li>
+</ul>
+<h3 id="others-command-may-be-useful">others command may be useful</h3>
+<ul>
+<li>!eestack</li>
+</ul>
+<h3 id="tricks">tricks</h3>
+<ul>
+<li>Ctrl + Break can interrupt <code>*BUSY*</code> operations</li>
+<li>ESC can clear your current input</li>
+<li>remove srv* from sympath after symbols cached will speed up your symbols finding.</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://blogs.msdn.microsoft.com/paullou/2011/06/28/debugging-managed-code-memory-leak-with-memory-dump-using-windbg/">https://blogs.msdn.microsoft.com/paullou/2011/06/28/debugging-managed-code-memory-leak-with-memory-dump-using-windbg/</a></li>
+<li><a href="https://theartofdev.com/windbg-cheat-sheet/">https://theartofdev.com/windbg-cheat-sheet/</a></li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/framework/tools/sos-dll-sos-debugging-extension">https://docs.microsoft.com/en-us/dotnet/framework/tools/sos-dll-sos-debugging-extension</a></li>
+<li><a href="http://www.cnblogs.com/gaochundong/p/windbg_cheat_sheet.html">http://www.cnblogs.com/gaochundong/p/windbg_cheat_sheet.html</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">daymade</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-07-26
+        <a href="blog/commit/1c8b545689a257fb8564f74d42f56f72e94f74c7" title="init">(1c8b545)</a>
+    </span>
+  </p>
+  <p class="copyright-item">
+      <span class="item-title">原始文档</span>
+      <span class="item-content"><a class="link-to-markdown" href="/post/debugging-stackoverflow-exception-in-dotnet-core-using-windbg/index.md" target="_blank">查看本文 Markdown 版本 »</a></span>
+    </p>
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/debugging/">debugging</a>
+          <a href="/tags/windbg/">windbg</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/install-zeromq-on-windows/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Install Zeromq on Windows</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/about-var/">
+            <span class="next-text nav-default">About Var</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="comments-gitment"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/theme-next/theme-next-gitment@1/default.min.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/gh/theme-next/theme-next-gitment@1/gitment.browser.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitment = new Gitment({
+        id: '2018-04-24 19:45:42 \u002b0800 CST',
+        title: 'Debugging Stackoverflow Exception in Dotnet Core Using Windbg',
+        link: decodeURI(location.href),
+        desc: '',
+        owner: 'daymade',
+        repo: 'daymade.github.io',
+        oauth: {
+          client_id: '2761c940a1b02c078229',
+          client_secret: '40d5091e8c7df0654e9cd9ae2a35e1c06dbfd483'
+        }
+      });
+      gitment.render('comments-gitment');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/imsun/gitment">comments powered by gitment.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://twitter.com/finedtune" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/daymade" class="iconfont icon-github" title="github"></a>
+  
+      <a href='/post/debugging-stackoverflow-exception-in-dotnet-core-using-windbg/index.xml' type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+    
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2013 - 
+    2024<span class="heart"><i class="iconfont icon-heart"></i></span><span>daymade</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+  
+    
+      
+    
+  
+
+
+
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CFV7E7BCN1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CFV7E7BCN1');
+</script>
+
+
+
+
+
+
+</body>
+</html>

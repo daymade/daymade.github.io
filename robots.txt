@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://typeof.tech/sitemap.xml
