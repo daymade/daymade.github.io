@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Performance Optimization for Golang Applications - 研究研究</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="daymade" /><meta name="description" content="using pprof to optimize the performance of golang applications" /><meta name="keywords" content="daymade" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.125.4 with theme even" />
+
+
+<link rel="canonical" href="https://typeof.tech/post/performance-optimization-for-golang-applications/" />
+  <link href="https://typeof.tech/post/performance-optimization-for-golang-applications/index.xml" rel="alternate" type="application/rss+xml" title="研究研究" />
+  <link href="https://typeof.tech/post/performance-optimization-for-golang-applications/index.xml" rel="feed" type="application/rss+xml" title="研究研究" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="https://typeof.tech/post/performance-optimization-for-golang-applications/">
+  <meta property="og:site_name" content="研究研究">
+  <meta property="og:title" content="Performance Optimization for Golang Applications">
+  <meta property="og:description" content="using pprof to optimize the performance of golang applications">
+  <meta property="og:locale" content="zh-cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-04-24T20:19:59+08:00">
+    <meta property="article:modified_time" content="2019-07-26T23:09:15+08:00">
+
+  <meta itemprop="name" content="Performance Optimization for Golang Applications">
+  <meta itemprop="description" content="using pprof to optimize the performance of golang applications">
+  <meta itemprop="datePublished" content="2018-04-24T20:19:59+08:00">
+  <meta itemprop="dateModified" content="2019-07-26T23:09:15+08:00">
+  <meta itemprop="wordCount" content="715"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Performance Optimization for Golang Applications">
+<meta name="twitter:description" content="using pprof to optimize the performance of golang applications">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">研究研究</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">研究研究</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Performance Optimization for Golang Applications</h1>
+      <h3 class="post-meta">using pprof to optimize the performance of golang applications</h3>
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-24 </span>
+        <span class="more-meta"> daymade </span>
+        
+        
+          <span class="more-meta"> 约 715 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      <h2 id="0x00-简介">0x00 简介</h2>
+<p>本篇文章主要讲如何测量一个 Golang 应用的性能.</p>
+<blockquote>
+<p>if you can&rsquo;t measure it , you can&rsquo;t improve it</p>
+<p>&ndash;<em>Peter Drucker</em></p>
+</blockquote>
+<p>包括以下内容:</p>
+<ul>
+<li>性能优化方法论</li>
+<li>pprof 的基本使用方法</li>
+<li>使用 runtime/trace</li>
+</ul>
+<h2 id="0x01-性能优化基础">0x01 性能优化基础</h2>
+<h3 id="时机">时机</h3>
+<p>什么时候该严肃地考虑性能问题? 当你觉得性能不够用的时候. 也许就是你该优化程序的性能了.</p>
+<p>性能优化在软件开发的三个步骤里排在最后.</p>
+<blockquote>
+<p>先跑起来, 再跑正确, 再跑快.</p>
+</blockquote>
+<h3 id="方法论">方法论</h3>
+<h4 id="如何衡量和优化服务的性能">如何衡量和优化服务的性能？</h4>
+<p>要衡量和优化服务的性能，我们可以从四个步骤入手：</p>
+<ol>
+<li>测量（measure）</li>
+<li>分析（analyze）</li>
+<li>剖析（profile）</li>
+<li>改进（improve）</li>
+</ol>
+<h3 id="性能标准">性能标准</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Latency Comparison Numbers
+</span></span><span class="line"><span class="cl">--------------------------
+</span></span><span class="line"><span class="cl">L1 cache reference                           0.5 ns
+</span></span><span class="line"><span class="cl">Branch mispredict                           5   ns
+</span></span><span class="line"><span class="cl">L2 cache reference                           7   ns                     14x L1 cache
+</span></span><span class="line"><span class="cl">Mutex lock/unlock                           25   ns
+</span></span><span class="line"><span class="cl">Main memory reference                     100   ns                     20x L2 cache, 200x L1 cache
+</span></span><span class="line"><span class="cl">Compress 1K bytes with Zippy             3,000   ns       3 us
+</span></span><span class="line"><span class="cl">Send 1K bytes over 1 Gbps network       10,000   ns       10 us
+</span></span><span class="line"><span class="cl">Read 4K randomly from SSD*             150,000   ns     150 us         ~1GB/sec SSD
+</span></span><span class="line"><span class="cl">Read 1 MB sequentially from memory     250,000   ns     250 us
+</span></span><span class="line"><span class="cl">Round trip within same datacenter     500,000   ns     500 us
+</span></span><span class="line"><span class="cl">Read 1 MB sequentially from SSD*     1,000,000   ns   1,000 us   1 ms ~1GB/sec SSD, 4X memory
+</span></span><span class="line"><span class="cl">Disk seek                           10,000,000   ns   10,000 us   10 ms 20x datacenter roundtrip
+</span></span><span class="line"><span class="cl">Read 1 MB sequentially from disk   20,000,000   ns   20,000 us   20 ms 80x memory, 20X SSD
+</span></span><span class="line"><span class="cl">Send packet CA-&gt;Netherlands-&gt;CA   150,000,000   ns 150,000 us 150 ms
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">Notes
+</span></span><span class="line"><span class="cl">-----
+</span></span><span class="line"><span class="cl">1 ns = 10^-9 seconds
+</span></span><span class="line"><span class="cl">1 us = 10^-6 seconds = 1,000 ns
+</span></span><span class="line"><span class="cl">1 ms = 10^-3 seconds = 1,000 us = 1,000,000 ns
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">Credit
+</span></span><span class="line"><span class="cl">------
+</span></span><span class="line"><span class="cl">By Jeff Dean:               http://research.google.com/people/jeff/
+</span></span><span class="line"><span class="cl">Originally by Peter Norvig: http://norvig.com/21-days.html#answers
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">Contributions
+</span></span><span class="line"><span class="cl">-------------
+</span></span><span class="line"><span class="cl">Some updates from:       https://gist.github.com/2843375
+</span></span><span class="line"><span class="cl">&#39;Humanized&#39; comparison: https://gist.github.com/2843375
+</span></span><span class="line"><span class="cl">Visual comparison chart: http://i.imgur.com/k0t1e.png
+</span></span><span class="line"><span class="cl">Animated presentation:   http://prezi.com/pdkvgys-r0y6/latency-numbers-for-programmers-web-development/latency.txt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="0x01-工具">0x01 工具</h2>
+<h3 id="简介">简介</h3>
+<p>在 .Net 平台上, 有 dotProfiler, vs profiler 可供使用,</p>
+<p>虽然 golang 并没有一个 真正意义上 Full-featured 的 Profiling 工具, 但基于 golang 的 (<code>简单即美</code>) 哲学, 有许多小工具可以协作完成性能测量</p>
+<ul>
+<li>
+<p>import &ldquo;runtime/pprof&rdquo;</p>
+<p>Package pprof writes runtime profiling data in the format expected by the pprof visualization tool.</p>
+</li>
+</ul>
+<h3 id="更新">更新</h3>
+<p>在 go 1.12 以后, 官方的 pprof 已经自带了 FlameGraph, 所以之前的 <code>uber/go-torch</code> 等工具已经不是必须安装的了.
+下面介绍如何使用内置的 pprof 来查看火焰图</p>
+<ol>
+<li>首先在程序内部先启动 pprof</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nx">_</span> <span class="s">&#34;net/http/pprof&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">log</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;localhost:6060&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}()</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>pprof 可以直接使用下面的命令调用:</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">go tool pprof -http localhost:6061 -seconds <span class="m">60</span> localhost:6060
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 6060 端口是程序运行 pprof 的端口</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 6061 是 pprof 运行结束后, 在浏览器里打开的端口</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>在 <code>http://localhost:6061/ui/flamegraph</code> 即可以看到火焰图</li>
+</ol>
+<p>火焰图长这样:</p>
+<p><img src="http://www.brendangregg.com/FlameGraphs/example-dtrace.svg" alt="img"></p>
+<h2 id="reference">Reference</h2>
+<ul>
+<li><a href="https://github.com/google/pprof/blob/master/doc/pprof.md">https://github.com/google/pprof/blob/master/doc/pprof.md</a></li>
+<li><a href="https://github.com/uber/go-torch">https://github.com/uber/go-torch</a></li>
+<li><a href="https://mp.weixin.qq.com/s/MZv8DMowKKOWXf-8YE15_g">Service performance 101</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">daymade</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-07-26
+        <a href="blog/commit/1c8b545689a257fb8564f74d42f56f72e94f74c7" title="init">(1c8b545)</a>
+    </span>
+  </p>
+  <p class="copyright-item">
+      <span class="item-title">原始文档</span>
+      <span class="item-content"><a class="link-to-markdown" href="/post/performance-optimization-for-golang-applications/index.md" target="_blank">查看本文 Markdown 版本 »</a></span>
+    </p>
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/set-up-shadowsocks-on-your-server/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Set Up Shadowsocks on Your Server</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/installing-a-nuget-package-programmatically/">
+            <span class="next-text nav-default">Installing a Nuget Package Programmatically</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="comments-gitment"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/theme-next/theme-next-gitment@1/default.min.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/gh/theme-next/theme-next-gitment@1/gitment.browser.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitment = new Gitment({
+        id: '2018-04-24 20:19:59 \u002b0800 CST',
+        title: 'Performance Optimization for Golang Applications',
+        link: decodeURI(location.href),
+        desc: '',
+        owner: 'daymade',
+        repo: 'daymade.github.io',
+        oauth: {
+          client_id: '2761c940a1b02c078229',
+          client_secret: '40d5091e8c7df0654e9cd9ae2a35e1c06dbfd483'
+        }
+      });
+      gitment.render('comments-gitment');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/imsun/gitment">comments powered by gitment.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://twitter.com/finedtune" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/daymade" class="iconfont icon-github" title="github"></a>
+  
+      <a href='/post/performance-optimization-for-golang-applications/index.xml' type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+    
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2013 - 
+    2024<span class="heart"><i class="iconfont icon-heart"></i></span><span>daymade</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+  
+    
+      
+    
+  
+
+
+
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CFV7E7BCN1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CFV7E7BCN1');
+</script>
+
+
+
+
+
+
+</body>
+</html>

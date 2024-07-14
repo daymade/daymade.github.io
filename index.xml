@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>研究研究</title>
+    <link>https://typeof.tech/</link>
+    <description>Recent content on 研究研究</description>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
+    <copyright>daymade</copyright>
+    <lastBuildDate>Sun, 14 Jul 2024 23:30:44 +0800</lastBuildDate>
+    <atom:link href="https://typeof.tech/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Compute Storage Separate: A Case Study on AutoMQ</title>
+      <link>https://typeof.tech/post/compute-storage-separate-a-case-study-on-automq/</link>
+      <pubDate>Sun, 14 Jul 2024 16:49:20 +0800</pubDate>
+      <guid>https://typeof.tech/post/compute-storage-separate-a-case-study-on-automq/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>什么时候不该使用 Optional</title>
+      <link>https://typeof.tech/post/when-and-how-to-use-optional-in-java/</link>
+      <pubDate>Sun, 02 Jul 2023 21:43:13 +0800</pubDate>
+      <guid>https://typeof.tech/post/when-and-how-to-use-optional-in-java/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>为什么不要 Catch Throwable</title>
+      <link>https://typeof.tech/post/why-we-should-catch-throwable-in-java/</link>
+      <pubDate>Sun, 02 Jul 2023 20:43:13 +0800</pubDate>
+      <guid>https://typeof.tech/post/why-we-should-catch-throwable-in-java/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>I insist on Go Get</title>
+      <link>https://typeof.tech/post/i-insist-on-go-get/</link>
+      <pubDate>Thu, 12 Dec 2019 20:42:38 +0800</pubDate>
+      <guid>https://typeof.tech/post/i-insist-on-go-get/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>The Application Which Take a Guard Against Its Teammates Can Bring Higher Availablility</title>
+      <link>https://typeof.tech/post/the-application-which-take-a-guard-against-its-teammates-can-bring-higher-availablility/</link>
+      <pubDate>Tue, 24 Apr 2018 20:25:53 +0800</pubDate>
+      <guid>https://typeof.tech/post/the-application-which-take-a-guard-against-its-teammates-can-bring-higher-availablility/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>How Micro Should the Microservice Be</title>
+      <link>https://typeof.tech/post/how-micro-should-the-microservice-be/</link>
+      <pubDate>Tue, 24 Apr 2018 20:25:00 +0800</pubDate>
+      <guid>https://typeof.tech/post/how-micro-should-the-microservice-be/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Set Up Shadowsocks on Your Server</title>
+      <link>https://typeof.tech/post/set-up-shadowsocks-on-your-server/</link>
+      <pubDate>Tue, 24 Apr 2018 20:22:07 +0800</pubDate>
+      <guid>https://typeof.tech/post/set-up-shadowsocks-on-your-server/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Performance Optimization for Golang Applications</title>
+      <link>https://typeof.tech/post/performance-optimization-for-golang-applications/</link>
+      <pubDate>Tue, 24 Apr 2018 20:19:59 +0800</pubDate>
+      <guid>https://typeof.tech/post/performance-optimization-for-golang-applications/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Installing a Nuget Package Programmatically</title>
+      <link>https://typeof.tech/post/installing-a-nuget-package-programmatically/</link>
+      <pubDate>Tue, 24 Apr 2018 20:18:53 +0800</pubDate>
+      <guid>https://typeof.tech/post/installing-a-nuget-package-programmatically/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Install Zeromq on Windows</title>
+      <link>https://typeof.tech/post/install-zeromq-on-windows/</link>
+      <pubDate>Tue, 24 Apr 2018 20:11:32 +0800</pubDate>
+      <guid>https://typeof.tech/post/install-zeromq-on-windows/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Debugging Stackoverflow Exception in Dotnet Core Using Windbg</title>
+      <link>https://typeof.tech/post/debugging-stackoverflow-exception-in-dotnet-core-using-windbg/</link>
+      <pubDate>Tue, 24 Apr 2018 19:45:42 +0800</pubDate>
+      <guid>https://typeof.tech/post/debugging-stackoverflow-exception-in-dotnet-core-using-windbg/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>About Var</title>
+      <link>https://typeof.tech/post/about-var/</link>
+      <pubDate>Mon, 27 Feb 2017 20:23:13 +0800</pubDate>
+      <guid>https://typeof.tech/post/about-var/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Newtonsoft Json Serialize Object Returns Empty</title>
+      <link>https://typeof.tech/post/newtonsoft-json-serialize-object-returns-empty/</link>
+      <pubDate>Wed, 30 Mar 2016 19:44:32 +0800</pubDate>
+      <guid>https://typeof.tech/post/newtonsoft-json-serialize-object-returns-empty/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Getting Started of Learning Japanese</title>
+      <link>https://typeof.tech/post/getting-started-of-learning-japanese/</link>
+      <pubDate>Mon, 26 Jan 2015 19:43:13 +0800</pubDate>
+      <guid>https://typeof.tech/post/getting-started-of-learning-japanese/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>The Art of Readable Code</title>
+      <link>https://typeof.tech/post/the-art-of-readable-code/</link>
+      <pubDate>Mon, 19 Jan 2015 19:36:55 +0800</pubDate>
+      <guid>https://typeof.tech/post/the-art-of-readable-code/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Record of installing RxLibrary 2.7.5 in Delphi XE5</title>
+      <link>https://typeof.tech/post/install-rxlib/</link>
+      <pubDate>Fri, 14 Mar 2014 19:34:50 +0800</pubDate>
+      <guid>https://typeof.tech/post/install-rxlib/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Screenshot</title>
+      <link>https://typeof.tech/post/screenshot/</link>
+      <pubDate>Sat, 21 Dec 2013 19:34:00 +0800</pubDate>
+      <guid>https://typeof.tech/post/screenshot/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Output primer numbers within 100</title>
+      <link>https://typeof.tech/post/c-primer/</link>
+      <pubDate>Sat, 21 Dec 2013 19:32:43 +0800</pubDate>
+      <guid>https://typeof.tech/post/c-primer/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Hello World</title>
+      <link>https://typeof.tech/post/hello-world/</link>
+      <pubDate>Tue, 30 Apr 2013 19:31:07 +0800</pubDate>
+      <guid>https://typeof.tech/post/hello-world/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on 研究研究</title>
+    <link>https://typeof.tech/tags/</link>
+    <description>Recent content in Tags on 研究研究</description>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
+    <copyright>daymade</copyright>
+    <lastBuildDate>Sun, 14 Jul 2024 23:30:44 +0800</lastBuildDate>
+    <atom:link href="https://typeof.tech/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Cloud Compute</title>
+      <link>https://typeof.tech/tags/cloud-compute/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://typeof.tech/tags/cloud-compute/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Design</title>
+      <link>https://typeof.tech/tags/design/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://typeof.tech/tags/design/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Finops</title>
+      <link>https://typeof.tech/tags/finops/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://typeof.tech/tags/finops/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Code Reabability</title>
+      <link>https://typeof.tech/tags/code-reabability/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://typeof.tech/tags/code-reabability/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Java</title>
+      <link>https://typeof.tech/tags/java/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://typeof.tech/tags/java/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Debugging</title>
+      <link>https://typeof.tech/tags/debugging/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://typeof.tech/tags/debugging/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Windbg</title>
+      <link>https://typeof.tech/tags/windbg/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://typeof.tech/tags/windbg/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

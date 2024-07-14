@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>The Art of Readable Code - 研究研究</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="daymade" /><meta name="description" content="" /><meta name="keywords" content="daymade" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.125.4 with theme even" />
+
+
+<link rel="canonical" href="https://typeof.tech/post/the-art-of-readable-code/" />
+  <link href="https://typeof.tech/post/the-art-of-readable-code/index.xml" rel="alternate" type="application/rss+xml" title="研究研究" />
+  <link href="https://typeof.tech/post/the-art-of-readable-code/index.xml" rel="feed" type="application/rss+xml" title="研究研究" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="https://typeof.tech/post/the-art-of-readable-code/">
+  <meta property="og:site_name" content="研究研究">
+  <meta property="og:title" content="The Art of Readable Code">
+  <meta property="og:description" content="blog for daymade">
+  <meta property="og:locale" content="zh-cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2015-01-19T19:36:55+08:00">
+    <meta property="article:modified_time" content="2019-07-26T23:09:15+08:00">
+
+  <meta itemprop="name" content="The Art of Readable Code">
+  <meta itemprop="description" content="blog for daymade">
+  <meta itemprop="datePublished" content="2015-01-19T19:36:55+08:00">
+  <meta itemprop="dateModified" content="2019-07-26T23:09:15+08:00">
+  <meta itemprop="wordCount" content="1808"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="The Art of Readable Code">
+<meta name="twitter:description" content="">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">研究研究</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">研究研究</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">The Art of Readable Code</h1>
+      <h3 class="post-meta"></h3>
+      <div class="post-meta">
+        <span class="post-time"> 2015-01-19 </span>
+        <span class="more-meta"> daymade </span>
+        
+        
+          <span class="more-meta"> 约 1808 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
+
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      <h1 id="编写可读代码的艺术">编写可读代码的艺术</h1>
+<p>标签（空格分隔）： 读书笔记</p>
+<hr>
+<h1 id="让代码更加易于理解">让代码更加易于理解</h1>
+<h3 id="所有的事情都是为了让代码更加容易阅读-衡量的标准为-相比于代码行数-更加倾向于其他人阅读这段代码所花费的时间">所有的事情都是为了让代码更加容易阅读, 衡量的标准为: 相比于代码行数, 更加倾向于其他人阅读这段代码所花费的时间</h3>
+<p>:</p>
+<h2 id="把信息塞进名字中">把信息塞进名字中</h2>
+<h3 id="使用专业的单词">使用专业的单词</h3>
+<p>例如,不用Get, 而用Fetch或Download, 这要由上下文决定</p>
+<h3 id="避免空泛的名字">避免空泛的名字</h3>
+<p>像tmp和retval, 除非使用它们有特殊的理由</p>
+<h3 id="使用具体的名字来更细致的描述事物">使用具体的名字来更细致的描述事物</h3>
+<p>ServerCanStart()这个名字就比CanListenPort更不清楚</p>
+<h3 id="给变量名带上重要的细节">给变量名带上重要的细节</h3>
+<p>例如, 在值为毫秒的变量后面加上<code>_ms</code>, 或者在还需要转义的, 未处理的变量前面加上raw_</p>
+<h3 id="为作用域更大的变量采用更长的名字">为作用域更大的变量采用更长的名字</h3>
+<p>出现的范围越大, 范围越广, 变量的名字含义应该越丰富</p>
+<h3 id="有目的地使用大小写-下划线等">有目的地使用大小写, 下划线等</h3>
+<p>例如, 你可以在类成员和局部变量前面加上<code>&quot;_&quot;</code>来区分它们</p>
+<h2 id="不会误解的名字">不会误解的名字</h2>
+<h3 id="阅读你代码的人应该理解你的本意">阅读你代码的人应该理解你的本意</h3>
+<p>不要使用两义性的单词
+定义一个值的下限和上限时, 使用<code>max</code>和<code>min</code>, 对于包含的范围, <code>first</code>和<code>last</code>是好的选择, 对于包含/排除范围, <code>begin</code>和<code>end</code>是最好的选择</p>
+<h3 id="在为bool值命名时">在为bool值命名时,</h3>
+<p>使用is和has这样的词来明确表示它是个boolean, 避免使用反义的词</p>
+<h3 id="小心用户对特定词的期望">小心用户对特定词的期望</h3>
+<p>例如: 用户会期望<code>get()</code>或者<code>size()</code>是轻量的方法</p>
+<h2 id="代码的审美">代码的审美</h2>
+<h3 id="如果多个代码块做相似的事情-尝试让它们有同样的剪影">如果多个代码块做相似的事情, 尝试让它们有同样的剪影</h3>
+<h3 id="在必要时-可以用列对齐">在必要时, 可以用列对齐</h3>
+<h3 id="如果在一段代码中提到ab和c-那么不要再另一段话里说bc和a-选定一个有意义的顺序-不要改变它">如果在一段代码中提到A.B和C, 那么不要再另一段话里说B.C和A, 选定一个有意义的顺序, 不要改变它</h3>
+<h3 id="用空行来把大块代码分成逻辑上的段落">用空行来把大块代码分成逻辑上的&quot;段落&quot;</h3>
+<h2 id="该写什么样的注释">该写什么样的注释</h2>
+<h3 id="什么不需要注释">什么不需要注释</h3>
+<ul>
+<li>能从代码本身中迅速推断的事实</li>
+<li>用来粉饰烂代码的&quot;拐杖式注释&quot;&ndash;应该把代码改好</li>
+</ul>
+<h3 id="你应该记录下来的想法包括">你应该记录下来的想法包括</h3>
+<ul>
+<li>对于代码写成这样而不是那样的内在理由</li>
+<li>代码中的缺陷, 使用像<code>TODO:</code>或者<code>XXX:</code>这样的标记</li>
+<li>常量背后的故事, 为什么是这个值</li>
+</ul>
+<h3 id="站在读者的立场上思考">站在读者的立场上思考</h3>
+<ul>
+<li>预料到代码中哪些部分会让读者说: &ldquo;啊?&rdquo; , 并且给它们加上注释</li>
+<li>为普通读者意料之外的行为加上注释</li>
+<li>在文件/类的级别上使用&quot;全局观&quot;注释来解释所有的部分是如何一起工作的</li>
+<li>用注释来总结代码块, 使读者不致迷失在细节中</li>
+</ul>
+<h2 id="写出言简意赅的注释">写出言简意赅的注释</h2>
+<ul>
+<li>当像it 和this 这样的代词可能指代多个事物时, 避免使用它们</li>
+<li>尽量精确地描述函数的行为</li>
+<li>在注释中用精心挑选的输入/输入例子进行说明(单元测试)</li>
+<li>声明代码的高层次意图, 而非明显的细节</li>
+<li>用嵌入的注释(如<code>Function(/* arg = */...)</code>)来解释难以理解的函数参数, 在C#里, 可以使用<strong>命名实参</strong></li>
+<li>用含义丰富的词来使注释简洁</li>
+</ul>
+<h1 id="简化循环和逻辑">简化循环和逻辑</h1>
+<h2 id="把控制流变得易读">把控制流变得易读</h2>
+<p>相对于追求最小化代码行数, 一个更好的度量方法是最小化人们理解它所需的时间</p>
+<p>有几种方法可以让代码的控制流更易读</p>
+<ul>
+<li>在写一个比较时(<code>while( bytes_expected &gt; bytes_received)</code>), 把改变的值写在左边, 把更稳定的值写在右边更好一些(<code>while( bytes_received &lt; bytes_expected )</code>)</li>
+<li>重排if/else 语句中的代码块, 先处理正确的/简单的/有趣的情况</li>
+<li>尽量不要使用do/while循环, 仅在必要时使用三目运算符(<code>:?</code>)和<code>goto</code></li>
+<li>把嵌套的代码块改写成线性的代码</li>
+<li>通常来讲可以使用提前返回来减少嵌套, 此种语句被称为&quot;保护语句&quot;</li>
+</ul>
+<h2 id="拆分超长的表达式">拆分超长的表达式</h2>
+<ul>
+<li>引用&quot;解释变量&quot;来代表较长的子表达式
+<ul>
+<li>他把巨大的表达式拆成小段</li>
+<li>它通过用简单的名字描述子表达式来使代码文档化</li>
+<li>帮助读者识别代码中的主要概念</li>
+</ul>
+</li>
+<li>使用德摩根定理来操作逻辑表达式, 重写布尔表达式</li>
+</ul>
+<h2 id="变量与可读性">变量与可读性</h2>
+<ul>
+<li>减少变量</li>
+<li>减小每个变量的作用域</li>
+<li>只写一次的变量更好</li>
+</ul>
+<h1 id="重新组织代码">重新组织代码</h1>
+<h2 id="抽取不相关的子问题">抽取不相关的子问题</h2>
+<p>把公共代码和项目专有的代码分开, 例如使用Common.dll</p>
+<h2 id="一次只做一件事">一次只做一件事</h2>
+<h2 id="把想法变成代码">把想法变成代码</h2>
+<p>使用自然语言描述程序, 然后用这个描述来帮助你写出更自然的代码</p>
+<h2 id="少写代码">少写代码</h2>
+<ul>
+<li>从项目中消除不必要的功能, 不要过度设计</li>
+<li>重新考虑需求, 解决版本最简单的问题, 只要能完成工作就行</li>
+<li>经常性通读标准库的整个API, 保持对它们的熟悉程度</li>
+</ul>
+<h1 id="附加">附加</h1>
+<h2 id="测试与可读性">测试与可读性</h2>
+<ul>
+<li>每个测试的最高一层应该越简明越好. 最好每个测试的输入/输出都可以用一行代码来描述</li>
+<li>如果测试失败了, 它所发出的错误消息应该能让你容易跟踪并修正这个bug</li>
+<li>使用最简单的并且能够完整运用代码的测试输入</li>
+<li>给测试函数取一个有完整描述性的名字, 以使每个测试所测的东西都很明确.</li>
+<li>使测试易于改动和增加新的测试</li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">daymade</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-07-26
+        <a href="blog/commit/1c8b545689a257fb8564f74d42f56f72e94f74c7" title="init">(1c8b545)</a>
+    </span>
+  </p>
+  <p class="copyright-item">
+      <span class="item-title">原始文档</span>
+      <span class="item-content"><a class="link-to-markdown" href="/post/the-art-of-readable-code/index.md" target="_blank">查看本文 Markdown 版本 »</a></span>
+    </p>
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/getting-started-of-learning-japanese/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Getting Started of Learning Japanese</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/install-rxlib/">
+            <span class="next-text nav-default">Record of installing RxLibrary 2.7.5 in Delphi XE5</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="comments-gitment"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/theme-next/theme-next-gitment@1/default.min.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/gh/theme-next/theme-next-gitment@1/gitment.browser.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitment = new Gitment({
+        id: '2015-01-19 19:36:55 \u002b0800 CST',
+        title: 'The Art of Readable Code',
+        link: decodeURI(location.href),
+        desc: '',
+        owner: 'daymade',
+        repo: 'daymade.github.io',
+        oauth: {
+          client_id: '2761c940a1b02c078229',
+          client_secret: '40d5091e8c7df0654e9cd9ae2a35e1c06dbfd483'
+        }
+      });
+      gitment.render('comments-gitment');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/imsun/gitment">comments powered by gitment.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://twitter.com/finedtune" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/daymade" class="iconfont icon-github" title="github"></a>
+  
+      <a href='/post/the-art-of-readable-code/index.xml' type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+    
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2013 - 
+    2024<span class="heart"><i class="iconfont icon-heart"></i></span><span>daymade</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+  
+    
+      
+    
+  
+
+
+
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CFV7E7BCN1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CFV7E7BCN1');
+</script>
+
+
+
+
+
+
+</body>
+</html>

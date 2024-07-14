@@ -1,0 +1,235 @@
+<?xml-stylesheet type="text/xsl" href="https://typeof.tech/sitemap.xsl"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>https://typeof.tech/categories/</loc>
+    <lastmod>2024-07-14T23:30:44+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/tags/cloud-compute/</loc>
+    <lastmod>2024-07-14T23:30:44+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/categories/cloud-native/</loc>
+    <lastmod>2024-07-14T23:30:44+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/post/compute-storage-separate-a-case-study-on-automq/</loc>
+    <lastmod>2024-07-14T23:30:44+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/tags/design/</loc>
+    <lastmod>2024-07-14T23:30:44+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/tags/finops/</loc>
+    <lastmod>2024-07-14T23:30:44+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/post/</loc>
+    <lastmod>2024-07-14T23:30:44+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/tags/</loc>
+    <lastmod>2024-07-14T23:30:44+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/</loc>
+    <lastmod>2024-07-14T23:30:44+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/tags/code-reabability/</loc>
+    <lastmod>2023-07-02T22:09:17+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/tags/java/</loc>
+    <lastmod>2023-07-02T22:09:17+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/categories/java/</loc>
+    <lastmod>2023-07-02T22:09:17+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/post/when-and-how-to-use-optional-in-java/</loc>
+    <lastmod>2023-07-02T22:09:17+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/post/why-we-should-catch-throwable-in-java/</loc>
+    <lastmod>2023-07-02T22:09:17+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/post/i-insist-on-go-get/</loc>
+    <lastmod>2019-12-12T21:09:47+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/post/the-application-which-take-a-guard-against-its-teammates-can-bring-higher-availablility/</loc>
+    <lastmod>2019-07-26T23:09:15+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/post/how-micro-should-the-microservice-be/</loc>
+    <lastmod>2019-07-26T23:09:15+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/post/set-up-shadowsocks-on-your-server/</loc>
+    <lastmod>2019-07-26T23:09:15+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/post/performance-optimization-for-golang-applications/</loc>
+    <lastmod>2019-07-26T23:09:15+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/post/installing-a-nuget-package-programmatically/</loc>
+    <lastmod>2019-07-26T23:09:15+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/post/install-zeromq-on-windows/</loc>
+    <lastmod>2019-07-26T23:09:15+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/tags/debugging/</loc>
+    <lastmod>2019-07-26T23:09:15+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/categories/debugging/</loc>
+    <lastmod>2019-07-26T23:09:15+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/post/debugging-stackoverflow-exception-in-dotnet-core-using-windbg/</loc>
+    <lastmod>2019-07-26T23:09:15+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/tags/windbg/</loc>
+    <lastmod>2019-07-26T23:09:15+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/post/about-var/</loc>
+    <lastmod>2019-07-26T23:09:15+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/post/newtonsoft-json-serialize-object-returns-empty/</loc>
+    <lastmod>2019-07-26T23:09:15+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/post/getting-started-of-learning-japanese/</loc>
+    <lastmod>2019-07-26T23:09:15+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/post/the-art-of-readable-code/</loc>
+    <lastmod>2019-07-26T23:09:15+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/post/install-rxlib/</loc>
+    <lastmod>2019-07-26T23:09:15+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/post/screenshot/</loc>
+    <lastmod>2019-07-26T23:09:15+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/post/c-primer/</loc>
+    <lastmod>2019-07-26T23:09:15+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://typeof.tech/post/hello-world/</loc>
+    <lastmod>2019-07-26T23:09:15+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+</urlset>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Compute Storage Separate: A Case Study on AutoMQ - 研究研究</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="daymade" /><meta name="description" content="通过 AutoMQ 探讨存算分离如何降低云成本" /><meta name="keywords" content="daymade" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.125.4 with theme even" />
+
+
+<link rel="canonical" href="https://typeof.tech/post/compute-storage-separate-a-case-study-on-automq/" />
+  <link href="https://typeof.tech/post/compute-storage-separate-a-case-study-on-automq/index.xml" rel="alternate" type="application/rss+xml" title="研究研究" />
+  <link href="https://typeof.tech/post/compute-storage-separate-a-case-study-on-automq/index.xml" rel="feed" type="application/rss+xml" title="研究研究" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="https://typeof.tech/post/compute-storage-separate-a-case-study-on-automq/">
+  <meta property="og:site_name" content="研究研究">
+  <meta property="og:title" content="Compute Storage Separate: A Case Study on AutoMQ">
+  <meta property="og:description" content="通过 AutoMQ 探讨存算分离如何降低云成本">
+  <meta property="og:locale" content="zh-cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2024-07-14T16:49:20+08:00">
+    <meta property="article:modified_time" content="2024-07-14T23:30:44+08:00">
+    <meta property="article:tag" content="Cloud Compute">
+    <meta property="article:tag" content="Finops">
+    <meta property="article:tag" content="Design">
+
+  <meta itemprop="name" content="Compute Storage Separate: A Case Study on AutoMQ">
+  <meta itemprop="description" content="通过 AutoMQ 探讨存算分离如何降低云成本">
+  <meta itemprop="datePublished" content="2024-07-14T16:49:20+08:00">
+  <meta itemprop="dateModified" content="2024-07-14T23:30:44+08:00">
+  <meta itemprop="wordCount" content="1743">
+  <meta itemprop="keywords" content="Cloud Compute,Finops,Design"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Compute Storage Separate: A Case Study on AutoMQ">
+<meta name="twitter:description" content="通过 AutoMQ 探讨存算分离如何降低云成本">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">研究研究</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">研究研究</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Compute Storage Separate: A Case Study on AutoMQ</h1>
+      <h3 class="post-meta">通过 AutoMQ 探讨存算分离如何降低云成本</h3>
+      <div class="post-meta">
+        <span class="post-time"> 2024-07-14 </span>
+        <span class="more-meta"> daymade </span>
+        
+        <div class="post-category">
+            <a href="/categories/cloud-native/"> cloud-native </a>
+            </div>
+          <span class="more-meta"> 约 1743 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
+
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      <h2 id="存算分离的历史">存算分离的历史</h2>
+<p>存算一体是上一个时代大部分中间件设计的背景，十年前主流机器是 IDC 而不是一朵朵云，当时想要整出一个可以方便弹性伸缩的技术架构基本上是会被 IDC 层面限制死的。</p>
+<p>存算分离是目前大环境降本增效的一个有力手段，再加上计算节点无状态化以后可以秒级扩缩容，云原生的技术团队经常有以下两个思路：</p>
+<ol>
+<li>通过分层存储来做冷热数据分离，降低冷数据的存储成本。</li>
+<li>通过存算分离避免数据频繁搬运，实现无状态节点的快速上下线。</li>
+</ol>
+<p>本文拿 AutoMQ 作为存算分离的案例，分析 AutoMQ 如何通过存算分离做到弹性伸缩，降本增效。</p>
+<p><img src="https://github.com/AutoMQ/automq/blob/main/docs/images/automq_vs_kafka.gif?raw=true" alt="automq_vs_kafka"></p>
+<h2 id="automq-和-pulsar">AutoMQ 和 Pulsar</h2>
+<p>要讨论 AutoMQ 就避不开另外一个云原生当红炸子鸡 Apache Pulsar，这两个都是最近这几年比较云原生的消息队列实现。Pulsar 由 Yahoo 开源，是一个云原生的分布式消息流平台。它采用了计算与存储分离的架构，借助 Apache BookKeeper 实现了低延迟、高吞吐的消息持久化。</p>
+<p><img src="https://pulsar.apache.org/assets/images/pulsar-system-architecture-6890df6b0c59a065a56492659ba87933.png" alt="pulsar-system-architecture"></p>
+<p>AutoMQ 是 RocketMQ 的团队做的，RocketMQ 自己在阿里内部也从 3.0 到 4.0 到 5.0 改变为云原生架构，但是这样的一个大项目，肯定是不如推倒重来更有效率的，就像淘宝的很多小二出去以后把拼多多做起来了一样，他们不是站在前人的肩膀上，而是站在自己的肩膀上。</p>
+<p>从诞生的时间上看，Pulsar 比 AutoMQ 要早几年。但 AutoMQ 后发优势明显，AutoMQ 充分吸取了 RocketMQ 多年来的实践经验，同时也借鉴了 Pulsar 的设计思想，但直接采用了更加云原生的架构。</p>
+<p>德国首相俾斯麦说 &ldquo;loser learned from their <strong>own</strong> experience&rdquo;，但不可否认，你如果自己踩过坑，肯定比学习别人的经验更加深刻，对不对？当然这没有考虑你自己的踩坑成本，实际上大部分成本是<del>冤大头</del>公司出的。</p>
+<h2 id="automq-如何实现存算分离">AutoMQ 如何实现存算分离？</h2>
+<p>回到 AutoMQ 上来，RocketMQ 团队不仅踩在自己的肩膀上，还踩在 Pulsar 的肩膀上，因为 Pulsar 的架构复杂度更高，维护成本肯定更复杂，而 AutoMQ 把很多复杂度交给了云厂商。他们认为云原生的路线有一部分是云厂商原生，这样才能利用好云的基础设施，利用好云厂商的规模优势，所以 AutoMQ 没有类似 Pulsar 的 BookKeeper 的设计，也不用自己维护一个存储集群，而是用了 EBS 的特性做容灾和共享存储。</p>
+<p><img src="https://docs.automq.com/assets/images/1-d40ca938521a07d9f47c6bb35d883061.png" alt="EBS WAL"></p>
+<p>EBS 是用来做 WAL 的，这个 WAL 可以认为是 AutoMQ 架构里的 L3 Cache，不需要像 Kafka 的分层存储架构里的 500G 这么大，10G 就足够了，主要目的是实现容灾而不是存储海量数据。</p>
+<p>WAL 是数据库系统中常用的一种技术，用于确保数据的持久性和一致性。它的核心思想是在对数据进行实际修改之前，先将修改操作记录到日志中。这样，即使系统在修改数据时崩溃，也可以通过重放日志来恢复数据。</p>
+<p>在 MySQL 中，InnoDB 存储引擎使用了类似的机制，称为 redo log。redo log 记录了对数据页的修改，使得 MySQL 可以在崩溃后快速恢复数据，而不需要重新执行所有的 SQL 语句。</p>
+<p>GreptimeDB，作为一个时序数据库，也采用了 WAL 机制。它使用 WAL 来提高写入性能和数据可靠性。WAL 允许 GreptimeDB 将多个写操作批量提交，减少磁盘 I/O，同时确保数据不会因系统崩溃而丢失。</p>
+<p>AWS MemoryDB 的思路是基于类似 Aurora 的共享存储概念，把日志存放在远端共享存储中，这种做法虽然性能下降严重（仅有25%的性能），但确实是一种云原生 Share-Storage 的常见思路。好处是 LSM Tree 的 compaction 带来的性能下降也放到了远端，不会影响本机性能。同样的，GreptimeDB Edge 版本也推荐说 Edge 本地节点就不用 compaction 了，意义不大。</p>
+<p>回到 AutoMQ 的情况，使用 EBS 作为 WAL 的存储确实是一个聪明的选择。它利用了云服务的优势，实现了高可用性和容灾能力，而不需要像传统方式那样维护大量的本地存储。10GB 的 WAL 空间对于缓冲写入操作和保证数据一致性来说通常是足够的。</p>
+<p><img src="https://docs.automq.com/assets/images/1-4bdbe32917f8d3513fdf0283658cebe6.gif" alt="EBS WAL Detail"></p>
+<p>AutoMQ 通过利用 AWS EBS (Elastic Block Store) 的多重挂载功能来实现容灾和切换：</p>
+<ol>
+<li>
+<p><strong>EBS 多重挂载</strong>：
+数据冗余和高可用性的基础，云厂商（如 AWS）允许单个 EBS 卷同时挂载到同一可用区内的多个 EC2 实例上。</p>
+</li>
+<li>
+<p><strong>数据复制</strong>：
+通过多重挂载，多个 AutoMQ 节点可以同时访问相同的数据，从 Kafka 的 Share-Nothing 变成 Share-Storage。</p>
+</li>
+<li>
+<p><strong>故障检测和切换</strong>：
+当 Broker 节点发生故障或者需要扩容时，由于数据已经在 EBS 卷上并被多个节点挂载，新的 Broker 节点可以快速接管而不需要数据迁移。</p>
+</li>
+<li>
+<p><strong>跨可用区复制</strong>：
+虽然 EBS 多重挂载限于同一可用区，但 AutoMQ 可能还实现了跨可用区的数据复制策略，以提供更高级别的容灾能力。</p>
+</li>
+</ol>
+<p><img src="/blog_img/compute-storage-seperate/1.png" alt="automq-use-ebs"></p>
+<p>我在一个线下 Meetup 上问过他们，如果有的云厂商没有实现 EBS 的多重挂载怎么办？他们是否有 Roadmap 来自己实现 EBS 的存储分片和容灾？他们的回答是没有，因为这不是他们的发展路线，而且四大厂商都实现了多重挂载。（火山引擎不算）</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">daymade</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2024-07-14
+        <a href="blog/commit/51bf1cc3563c8732507cc0b31a256244ecbca6c1" title="add reference to aws memoryDB in compute storage separation">(51bf1cc)</a>
+    </span>
+  </p>
+  <p class="copyright-item">
+      <span class="item-title">原始文档</span>
+      <span class="item-content"><a class="link-to-markdown" href="/post/compute-storage-separate-a-case-study-on-automq/index.md" target="_blank">查看本文 Markdown 版本 »</a></span>
+    </p>
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/cloud-compute/">cloud compute</a>
+          <a href="/tags/finops/">finops</a>
+          <a href="/tags/design/">design</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/when-and-how-to-use-optional-in-java/">
+            <span class="next-text nav-default">什么时候不该使用 Optional</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="comments-gitment"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/theme-next/theme-next-gitment@1/default.min.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/gh/theme-next/theme-next-gitment@1/gitment.browser.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitment = new Gitment({
+        id: '2024-07-14 16:49:20 \u002b0800 CST',
+        title: 'Compute Storage Separate: A Case Study on AutoMQ',
+        link: decodeURI(location.href),
+        desc: '',
+        owner: 'daymade',
+        repo: 'daymade.github.io',
+        oauth: {
+          client_id: '2761c940a1b02c078229',
+          client_secret: '40d5091e8c7df0654e9cd9ae2a35e1c06dbfd483'
+        }
+      });
+      gitment.render('comments-gitment');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/imsun/gitment">comments powered by gitment.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://twitter.com/finedtune" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/daymade" class="iconfont icon-github" title="github"></a>
+  
+      <a href='/post/compute-storage-separate-a-case-study-on-automq/index.xml' type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+    
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2013 - 
+    2024<span class="heart"><i class="iconfont icon-heart"></i></span><span>daymade</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+  
+    
+      
+    
+  
+
+
+
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CFV7E7BCN1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CFV7E7BCN1');
+</script>
+
+
+
+
+
+
+</body>
+</html>
